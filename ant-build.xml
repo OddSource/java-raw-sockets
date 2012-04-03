@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ ant-build.xml from RawSockets modified Tuesday, June 28, 2011 12:08:45 CDT (-0500).
+  ~
+  ~ Copyright 2010-2011 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project name="rawsockets" default="all">
+
+	<property file="ant-build.properties" />
+
+	<dirname property="module.rawsockets.basedir" file="${ant.file}" />
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${module.rawsockets.basedir}/test/lib/net.sf.antcontrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<taskdef resource="cpptasks.tasks">
+		<classpath>
+			<pathelement location="${module.rawsockets.basedir}/test/lib/net.sf.antcontrib.cpptasks-1.0b5.jar" />
+		</classpath>
+	</taskdef>
+
+	<!-- Compiler options -->
+
+	<property name="compiler.debug" value="on" />
+	<property name="compiler.generate.no.warnings" value="off" />
+	<property name="compiler.args" value="" />
+	<property name="compiler.max.memory" value="256m" />
+
+	<!-- JDK definitions -->
+
+	<property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin" />
+	<property name="jdk.include.1.6" value="${jdk.home.1.6}/include" />
+
+	<property name="project.jdk.home" value="${jdk.home.1.6}" />
+	<property name="project.jdk.bin" value="${jdk.bin.1.6}" />
+
+	<!-- Application Server Libraries -->
+
+	<!-- Modules -->
+
+	<!-- Module RawSockets -->
+
+	<dirname property="module.rawsockets.basedir" file="${ant.file}" />
+
+	<property name="module.jdk.home.rawsockets" value="${project.jdk.home}" />
+	<property name="module.jdk.bin.rawsockets" value="${project.jdk.bin}" />
+
+	<property name="compiler.args.rawsockets" value="${compiler.args}" />
+
+	<property name="rawsockets.dir.output.java" value="${module.rawsockets.basedir}/out/production/RawSockets" />
+	<property name="rawsockets.dir.output.native" value="${module.rawsockets.basedir}/out/production/native" />
+	<property name="rawsockets.dir.testOutput.unit" value="${module.rawsockets.basedir}/out/test/RawSockets/unit" />
+	<property name="rawsockets.dir.junitOutput.temp" value="${module.rawsockets.basedir}/out/junit/temp" />
+	<property name="rawsockets.dir.junitOutput.unit" value="${module.rawsockets.basedir}/out/junit/unit" />
+	<property name="rawsockets.dir.artifactOutput" value="${module.rawsockets.basedir}/out/artifacts" />
+	<property name="rawsockets.dir.javaDoc" value="${module.rawsockets.basedir}/out/javadoc" />
+
+	<path id="rawsockets.module.bootClasspath">
+		<!-- Paths to be included in compilation boot classpath -->
+	</path>
+
+	<property name="rawsockets.dependencies.runtime" value="dependencies.runtime" />
+	<path id="dependencies.runtime">
+		<fileset dir="${basedir}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="rawsockets.dependencies.test" value="dependencies.test" />
+	<path id="dependencies.test">
+		<fileset dir="${basedir}/test/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="rawsockets.classpath.build">
+		<path refid="${rawsockets.dependencies.runtime}" />
+	</path>
+
+	<path id="rawsockets.classpath.runtime">
+		<pathelement location="${rawsockets.dir.output.java}" />
+		<path refid="${rawsockets.dependencies.runtime}" />
+	</path>
+
+	<path id="rawsockets.classpath.test.build">
+		<pathelement location="${rawsockets.dir.output.java}" />
+		<path refid="${rawsockets.dependencies.runtime}" />
+		<path refid="${rawsockets.dependencies.test}" />
+	</path>
+
+	<path id="rawsockets.classpath.test.unit.runtime">
+		<pathelement location="${rawsockets.dir.output.java}" />
+		<pathelement location="${rawsockets.dir.testOutput.unit}" />
+		<path refid="${rawsockets.dependencies.runtime}" />
+		<path refid="${rawsockets.dependencies.test}" />
+	</path>
+
+	<property name="rawsockets.dir.build.source.native" value="${module.rawsockets.basedir}/src/native" />
+	<property name="rawsockets.dir.build.source.java" value="${module.rawsockets.basedir}/src/java" />
+	<path id="rawsockets.path.build.source">
+		<dirset dir="${module.rawsockets.basedir}">
+			<include name="src/java" />
+		</dirset>
+	</path>
+
+	<property name="rawsockets.dir.build.test.unit" value="${module.rawsockets.basedir}/test/unit" />
+	<path id="rawsockets.path.build.test.unit">
+		<dirset dir="${module.rawsockets.basedir}">
+			<include name="test/unit" />
+		</dirset>
+	</path>
+
+	<target name="clean" description="Cleanup">
+		<delete dir="${module.rawsockets.basedir}/out" />
+	</target>
+
+	<target name="init" description="Build initialization">
+		<mkdir dir="${module.rawsockets.basedir}/out" />
+
+		<!-- Determining the Java version for the compiler that we're actually using -->
+		<exec executable="${module.jdk.bin.rawsockets}/javac" outputproperty="java.jvm.version" failonerror="true" failifexecutionfails="true">
+			<arg value="-version" />
+		</exec>
+		<propertyregex property="java.jvm.version" input="${java.jvm.version}" casesensitive="false" override="true"
+					   regexp="javac ([0-9a-b\.\_]+)" select="\1" />
+		<echo message="Java compiler version is ${java.jvm.version}" />
+	</target>
+
+	<target name="compile.module.all"
+			depends="clean, init, compile.module.native, compile.module.source, compile.module.test.unit, generate.module.javaDoc"
+			description="Compile module RawSockets" />
+
+	<target name="compile.module.native" depends="clean, init" description="Compile production native (C++) code">
+		<mkdir dir="${rawsockets.dir.output.native}" />
+
+		<property name="compile.module.native.osFamily" value="" />
+		<osfamily property="compile.module.native.osFamily" />
+
+		<if>
+			<or>
+				<equals arg1="${compile.module.native.osFamily}" arg2="mac" casesensitive="false" />
+				<contains string="${os.name}" substring="mac os" casesensitive="false" />
+			</or>
+			<then>
+				<runtarget target="compile.module.native.os.mac" />
+			</then>
+			<elseif>
+				<equals arg1="${compile.module.native.osFamily}" arg2="windows" casesensitive="false" />
+				<then>
+					<runtarget target="compile.module.native.os.windows" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${compile.module.native.osFamily}" arg2="unix" casesensitive="false" />
+				<then>
+					<runtarget target="compile.module.native.os.unix" />
+				</then>
+			</elseif>
+			<else>
+				<fail message="Unsupported operating system family &quot;${compile.module.native.osFamily}&quot;, name &quot;${os.name}&quot;. Cannot compile native code." />
+			</else>
+		</if>
+	</target>
+	<target name="compile.module.native.os.mac" description="Compiles production native (C++) code for Mac OS X">
+		<echo message="Compiling native code for an Apple operating system." />
+		<echo message="Java include path is ${jdk.include.1.6}" />
+		<cc name="g++" objdir="${rawsockets.dir.output.native}" outtype="shared" runtime="dynamic" rebuild="true" relentless="true"
+			warnings="diagnostic" outfile="${rawsockets.dir.output.native}/rawsockets" optimize="full" failonerror="true">
+			<defineset define="_REENTRANT" />
+			<includepath path="${jdk.include.1.6}" />
+			<compilerarg value="-pipe" />
+			<fileset dir="/Users/Nicholas/RawSocketsNativeSrc" includes="*.cpp" />
+			<linker name="g++">
+				<linkerarg value="-single_module" />
+				<linkerarg value="-framework" />
+				<linkerarg value="JavaVM" />
+				<linkerarg value="-lstdc++" />
+			</linker>
+		</cc>
+		<move file="${rawsockets.dir.output.native}/librawsockets.so" tofile="${rawsockets.dir.output.native}/lib/librawsockets.jnilib" />
+	</target>
+	<target name="compile.module.native.os.windows" description="Compiles production native (C++) code for Microsoft Windows">
+		<echo message="Compiling native code for a Microsoft Windows operating system." />
+
+	</target>
+	<target name="compile.module.native.os.unix" description="Compiles production native (C++) code for Unix/Linux">
+		<echo message="Compiling native code for a *nix operating system (Unix/Linux)." />
+
+	</target>
+
+	<target name="compile.module.source" depends="clean, init, compile.module.native" description="Compile production Java classes">
+		<mkdir dir="${rawsockets.dir.output.java}" />
+
+		<javac destdir="${rawsockets.dir.output.java}" debug="${compiler.debug}"
+			   nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+			   executable="${module.jdk.bin.rawsockets}/javac" includeantruntime="false">
+			<compilerarg line="${compiler.args.rawsockets}" />
+			<bootclasspath refid="rawsockets.module.bootClasspath" />
+			<classpath refid="rawsockets.classpath.build" />
+			<src refid="rawsockets.path.build.source" />
+		</javac>
+	</target>
+
+	<target name="compile.module.test.unit" depends="clean, init, compile.module.source" description="Compile test classes"
+			unless="skip.tests">
+		<mkdir dir="${rawsockets.dir.testOutput.unit}" />
+
+		<javac destdir="${rawsockets.dir.testOutput.unit}" debug="${compiler.debug}"
+			   nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+			   executable="${module.jdk.bin.rawsockets}/javac" includeantruntime="false">
+			<compilerarg line="${compiler.args.rawsockets}" />
+			<bootclasspath refid="rawsockets.module.bootClasspath" />
+			<classpath refid="rawsockets.classpath.test.build" />
+			<src refid="rawsockets.path.build.test.unit" />
+		</javac>
+	</target>
+
+	<target name="generate.module.javaDoc" depends="clean, init" description="Generates the JavaDoc for the project">
+		<mkdir dir="${rawsockets.dir.javaDoc}" />
+
+		<javadoc sourcepath="${rawsockets.dir.build.source.java}"
+				 destdir="${rawsockets.dir.javaDoc}"
+				 maxmemory="${compiler.max.memory}"
+				 access="protected"
+				 version="true"
+				 use="true"
+				 author="true"
+				 windowtitle="RawSockets"
+				 breakiterator="yes"
+				 failonerror="true">
+			<doctitle><![CDATA[<h2>RawSockets</h2>]]></doctitle>
+			<bottom>
+				<![CDATA[<i>Copyright &#169; 2010-2011 Nicholas Williams. All Rights Reserved. Licensed Under the
+				<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License version 2.0</a>.</i>]]>
+			</bottom>
+			<link href="http://download.oracle.com/javase/6/docs/api/" />
+			<link href="http://commons.apache.org/cli/api-1.2/" />
+			<link href="http://commons.apache.org/codec/api-1.4/" />
+			<link href="http://commons.apache.org/io/api-2.0.1/" />
+			<classpath>
+				<path refid="rawsockets.classpath.build" />
+			</classpath>
+		</javadoc>
+	</target>
+
+	<target name="test.module.all"
+			depends="compile.module.all, test.module.unit"
+			description="Runs all unit, integration and regression tests" />
+
+	<target name="test.module.unit" depends="clean, init, compile.module.test.unit" description="Run all unit tests">
+		<mkdir dir="${rawsockets.dir.junitOutput.temp}" />
+		<mkdir dir="${rawsockets.dir.junitOutput.unit}" />
+
+		<junit printsummary="yes" outputtoformatters="yes" tempdir="${rawsockets.dir.junitOutput.temp}"
+			   jvm="${module.jdk.bin.rawsockets}/java" failureproperty="test.module.unit.testsFailed">
+			<classpath>
+				<path refid="rawsockets.classpath.test.unit.runtime" />
+			</classpath>
+
+			<!-- Get that native library loaded -->
+			<sysproperty key="java.library.path" value="${rawsockets.dir.output.native}/lib"/>
+
+			<formatter type="plain" />
+
+			<batchtest fork="yes" todir="${rawsockets.dir.junitOutput.unit}">
+				<fileset dir="${rawsockets.dir.build.test.unit}">
+					<include name="**/*.java" />
+					<exclude name="**/Mock*.java" />
+					<exclude name="net/nicholaswilliams/java/mock/**" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<fail if="${test.module.unit.testsFailed}" message="One or more unit tests failed." />
+	</target>
+
+	<target name="package.artifact.all"
+			depends="test.module.all, package.artifact.binary, package.artifact.sources, package.artifact.javadoc"
+			description="Build all artifacts" />
+
+	<target name="package.artifact.binary" depends="clean, init, compile.module.source" description="Package Binary Jar">
+		<mkdir dir="${rawsockets.dir.artifactOutput}" />
+
+		<!-- Determine the manifest class-path property -->
+		<pathconvert property="manifest.classpath.binary" pathsep=" ">
+			<path>
+				<fileset dir="${basedir}/lib">
+					<include name="*.jar" />
+					<!--<exclude name="org.apache.commons.cli*.jar" />-->
+				</fileset>
+			</path>
+			<flattenmapper />
+		</pathconvert>
+		<echo message="Manifest class-path is ${manifest.classpath.binary}" />
+
+		<!-- Package the JAR file -->
+		<jar destfile="${rawsockets.dir.artifactOutput}/net.nicholaswilliams.java.net.socket-binary-${rawsockets.version}.jar"
+			 duplicate="preserve" filesetmanifest="skip" index="true">
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Ant-Version" value="${ant.version}" />
+				<attribute name="Java-Version" value="${java.jvm.version}" />
+				<attribute name="Created-By" value="TeamCity" />
+				<attribute name="Bundle-Vendor" value="Nicholas Williams" />
+				<attribute name="Specification-Title" value="RawSockets" />
+				<attribute name="Specification-Version" value="${rawsockets.version}" />
+				<attribute name="Implementation-Version" value="${rawsockets.version}" />
+				<attribute name="Sealed" value="true" />
+				<attribute name="Class-Path" value="${manifest.classpath.binary}" />
+			</manifest>
+			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="${basedir}/jar/META-INF/README.txt" prefix="META-INF" />
+			<zipfileset dir="${rawsockets.dir.output.java}" />
+			<zipfileset dir="${rawsockets.dir.build.source.java}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="**/*.sh" />
+			</zipfileset>
+		</jar>
+	</target>
+
+	<target name="package.artifact.sources" depends="clean, init" description="Package Sources Jar">
+		<mkdir dir="${rawsockets.dir.artifactOutput}" />
+
+		<!-- Determine the manifest class-path property -->
+		<pathconvert property="manifest.classpath.sources" pathsep=" ">
+			<path refid="${rawsockets.dependencies.runtime}" />
+			<flattenmapper />
+		</pathconvert>
+		<echo message="Manifest class-path is ${manifest.classpath.sources}" />
+
+		<!-- Package the JAR file -->
+		<jar destfile="${rawsockets.dir.artifactOutput}/net.nicholaswilliams.java.net.socket-sources-${rawsockets.version}.zip"
+			 duplicate="preserve" filesetmanifest="skip" index="false">
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Ant-Version" value="${ant.version}" />
+				<attribute name="Java-Version" value="${java.jvm.version}" />
+				<attribute name="Created-By" value="TeamCity" />
+				<attribute name="Bundle-Vendor" value="Nicholas Williams" />
+				<attribute name="Specification-Title" value="RawSockets" />
+				<attribute name="Specification-Version" value="${rawsockets.version}" />
+				<attribute name="Implementation-Version" value="${rawsockets.version}" />
+				<attribute name="Class-Path" value="${manifest.classpath.sources}" />
+			</manifest>
+			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="${basedir}/jar/META-INF/README.txt" prefix="META-INF" />
+			<zipfileset dir="${module.rawsockets.basedir}/src" prefix="source" />
+		</jar>
+	</target>
+
+	<target name="package.artifact.javadoc" depends="clean, init, generate.module.javaDoc" description="Package JavaDoc Jar">
+		<mkdir dir="${rawsockets.dir.artifactOutput}" />
+
+		<!-- Package the JAR file -->
+		<zip destfile="${rawsockets.dir.artifactOutput}/net.nicholaswilliams.java.net.socket-javadoc-${rawsockets.version}.jar"
+			 duplicate="preserve">
+			<zipfileset dir="${rawsockets.dir.javaDoc}" />
+		</zip>
+	</target>
+
+	<target name="distribute.artifact.all" depends="package.artifact.all" description="Distributes JAR files">
+		<copy todir="${directory.distribute}" failonerror="true">
+			<fileset dir="${rawsockets.dir.artifactOutput}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="all" depends="compile.module.all, test.module.all, package.artifact.all" description="Build and package all" />
+</project>
