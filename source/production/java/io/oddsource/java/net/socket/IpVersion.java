@@ -28,26 +28,26 @@ package io.oddsource.java.net.socket;
 @SuppressWarnings("unused")
 public enum IpVersion
 {
-	IPv4(Constants.PF_INET, Constants.AF_INET),
-	IPv6(Constants.PF_INET6, Constants.AF_INET6);
+    IPv4(Constants.PF_INET, Constants.AF_INET),
+    IPv6(Constants.PF_INET6, Constants.AF_INET6);
 
-	private final int packetFormatFamily;
+    private final int packetFormatFamily;
 
-	private final int addressFormatFamily;
+    private final int addressFormatFamily;
 
-	IpVersion(final int packetFormatFamily, final int addressFormatFamily)
-	{
-		this.packetFormatFamily = packetFormatFamily;
-		this.addressFormatFamily = addressFormatFamily;
-	}
+    IpVersion(final int packetFormatFamily, final int addressFormatFamily)
+    {
+        this.packetFormatFamily = packetFormatFamily;
+        this.addressFormatFamily = addressFormatFamily;
+    }
 
-	public int getPacketFormatFamily()
-	{
-		return this.packetFormatFamily;
-	}
+    public int getPacketFormatFamily()
+    {
+        return this.packetFormatFamily;
+    }
 
-	public int getAddressFormatFamily()
-	{
-		return this.addressFormatFamily;
-	}
+    public int getAddressFormatFamily()
+    {
+        return this.addressFormatFamily;
+    }
 }

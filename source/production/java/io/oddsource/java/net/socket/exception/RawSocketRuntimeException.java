@@ -29,23 +29,23 @@ package io.oddsource.java.net.socket.exception;
 @SuppressWarnings("unused")
 public class RawSocketRuntimeException extends RuntimeException
 {
-	public RawSocketRuntimeException()
-	{
-		super();
-	}
+    public RawSocketRuntimeException()
+    {
+        super();
+    }
 
-	public RawSocketRuntimeException(String message)
-	{
-		super(message);
-	}
+    public RawSocketRuntimeException(String message)
+    {
+        super(message);
+    }
 
-	public RawSocketRuntimeException(Throwable cause)
-	{
-		super(cause);
-	}
+    public RawSocketRuntimeException(Throwable cause)
+    {
+        super(cause);
+    }
 
-	public RawSocketRuntimeException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public RawSocketRuntimeException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

@@ -28,33 +28,33 @@ package io.oddsource.java.net.socket.exception;
 @SuppressWarnings("unused")
 public class PayloadSizeLimitException extends RawSocketRuntimeException
 {
-	public PayloadSizeLimitException()
-	{
-		this("The payload size limit has been exceeded for this packet type.");
-	}
+    public PayloadSizeLimitException()
+    {
+        this("The payload size limit has been exceeded for this packet type.");
+    }
 
-	public PayloadSizeLimitException(int sizeLimit)
-	{
-		this("The payload size limit (" + sizeLimit + " bytes) has been exceeded for this packet type.");
-	}
+    public PayloadSizeLimitException(int sizeLimit)
+    {
+        this("The payload size limit (" + sizeLimit + " bytes) has been exceeded for this packet type.");
+    }
 
-	public PayloadSizeLimitException(String message)
-	{
-		super(message);
-	}
+    public PayloadSizeLimitException(String message)
+    {
+        super(message);
+    }
 
-	public PayloadSizeLimitException(Throwable cause)
-	{
-		this("The payload size limit has been exceeded for this packet type.", cause);
-	}
+    public PayloadSizeLimitException(Throwable cause)
+    {
+        this("The payload size limit has been exceeded for this packet type.", cause);
+    }
 
-	public PayloadSizeLimitException(int sizeLimit, Throwable cause)
-	{
-		this("The payload size limit (" + sizeLimit + " bytes) has been exceeded for this packet type.", cause);
-	}
+    public PayloadSizeLimitException(int sizeLimit, Throwable cause)
+    {
+        this("The payload size limit (" + sizeLimit + " bytes) has been exceeded for this packet type.", cause);
+    }
 
-	public PayloadSizeLimitException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public PayloadSizeLimitException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

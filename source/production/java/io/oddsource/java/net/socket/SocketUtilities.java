@@ -31,54 +31,54 @@ import java.net.UnknownHostException;
  */
 public final class SocketUtilities
 {
-	static
-	{
-		System.loadLibrary("rawsockets");
-	}
+    static
+    {
+        System.loadLibrary("rawsockets");
+    }
 
-	/**
-	 * Looks up the protocol by its name, and returns null if it's not found.
-	 *
-	 * @param name The name of the protocol to lookup
-	 * @return the protocol named by {@code name}, or null if it wasn't found.
-	 */
-	public static native Protocol getProtocolByName(String name);
+    /**
+     * Looks up the protocol by its name, and returns null if it's not found.
+     *
+     * @param name The name of the protocol to lookup
+     * @return the protocol named by {@code name}, or null if it wasn't found.
+     */
+    public static native Protocol getProtocolByName(String name);
 
-	/**
-	 * Looks up the protocol by its number, and returns null if it's not found.
-	 *
-	 * @param number The number of the protocol to lookup
-	 * @return the protocol numbered {@code number}, or null if it wasn't found.
-	 */
-	public static native Protocol getProtocolByNumber(int number);
+    /**
+     * Looks up the protocol by its number, and returns null if it's not found.
+     *
+     * @param number The number of the protocol to lookup
+     * @return the protocol numbered {@code number}, or null if it wasn't found.
+     */
+    public static native Protocol getProtocolByNumber(int number);
 
-	/**
-	 * Compiles a list of all protocols supported by the system; returns an empty array if no protocols are found.
-	 *
-	 * @return a list of all protocols supported by the system or an empty array if none were found.
-	 */
-	public static native Protocol[] getProtocolList();
+    /**
+     * Compiles a list of all protocols supported by the system; returns an empty array if no protocols are found.
+     *
+     * @return a list of all protocols supported by the system or an empty array if none were found.
+     */
+    public static native Protocol[] getProtocolList();
 
-	public static InetAddress getSourceAddressForDestination(InetAddress destination) throws UnknownHostException
-	{
-		throw new UnsupportedOperationException("Not implemented yet.");
-		/*int family = (destination instanceof Inet6Address) ?
-					 IpVersion.IPv6.getAddressFormatFamily() : IpVersion.IPv4.getAddressFormatFamily();
+    public static InetAddress getSourceAddressForDestination(InetAddress destination) throws UnknownHostException
+    {
+        throw new UnsupportedOperationException("Not implemented yet.");
+        /*int family = (destination instanceof Inet6Address) ?
+                     IpVersion.IPv6.getAddressFormatFamily() : IpVersion.IPv4.getAddressFormatFamily();
 
-		return InetAddress.getByAddress(
-				SocketUtilities.getSourceAddressForDestination(
-						destination.getAddress(),
-						family
-				)
-		);*/
-	}
-	//public static native byte[] getSourceAddressForDestination(byte[] destination, int addressFormatFamily);
+        return InetAddress.getByAddress(
+                SocketUtilities.getSourceAddressForDestination(
+                        destination.getAddress(),
+                        family
+                )
+        );*/
+    }
+    //public static native byte[] getSourceAddressForDestination(byte[] destination, int addressFormatFamily);
 
-	/**
-	 * This class is not meant to be instantiated.
-	 */
-	private SocketUtilities()
-	{
-		throw new UnsupportedOperationException("This class is not meant to be instantiated.");
-	}
+    /**
+     * This class is not meant to be instantiated.
+     */
+    private SocketUtilities()
+    {
+        throw new UnsupportedOperationException("This class is not meant to be instantiated.");
+    }
 }

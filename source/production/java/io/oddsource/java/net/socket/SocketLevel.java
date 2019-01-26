@@ -28,30 +28,30 @@ package io.oddsource.java.net.socket;
 @SuppressWarnings("unused")
 public enum SocketLevel
 {
-	SOCKET(Constants.SOL_SOCKET, true),
-	IP(Constants.SOL_IP, false),
-	IPv6(Constants.SOL_IPV6, true),
-	TCP(Constants.SOL_TCP, true),
-	UDP(Constants.SOL_UDP, true),
-	ICMP(Constants.IPPROTO_ICMP, true);
+    SOCKET(Constants.SOL_SOCKET, true),
+    IP(Constants.SOL_IP, false),
+    IPv6(Constants.SOL_IPV6, true),
+    TCP(Constants.SOL_TCP, true),
+    UDP(Constants.SOL_UDP, true),
+    ICMP(Constants.IPPROTO_ICMP, true);
 
-	private final int osConstant;
+    private final int osConstant;
 
-	private final boolean supportsIp6;
+    private final boolean supportsIp6;
 
-	private SocketLevel(int osConstant, boolean supportsIp6)
-	{
-		this.osConstant = osConstant;
-		this.supportsIp6 = supportsIp6;
-	}
+    private SocketLevel(int osConstant, boolean supportsIp6)
+    {
+        this.osConstant = osConstant;
+        this.supportsIp6 = supportsIp6;
+    }
 
-	public int getOsConstant()
-	{
-		return osConstant;
-	}
+    public int getOsConstant()
+    {
+        return osConstant;
+    }
 
-	public boolean isSupportsIp6()
-	{
-		return supportsIp6;
-	}
+    public boolean isSupportsIp6()
+    {
+        return supportsIp6;
+    }
 }

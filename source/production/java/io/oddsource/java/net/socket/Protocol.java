@@ -31,44 +31,44 @@ import java.util.List;
  */
 public final class Protocol
 {
-	private final String name;
+    private final String name;
 
-	private final List<String> aliases;
+    private final List<String> aliases;
 
-	private final int protocolNumber;
+    private final int protocolNumber;
 
-	public Protocol(String name, String[] aliases, int protocolNumber)
-	{
-		this.name = name;
-		this.aliases = Arrays.asList(aliases);
-		this.protocolNumber = protocolNumber;
-	}
+    public Protocol(String name, String[] aliases, int protocolNumber)
+    {
+        this.name = name;
+        this.aliases = Arrays.asList(aliases);
+        this.protocolNumber = protocolNumber;
+    }
 
-	public String getName()
-	{
-		return this.name;
-	}
+    public String getName()
+    {
+        return this.name;
+    }
 
-	public List<String> getAliases()
-	{
-		return this.aliases;
-	}
+    public List<String> getAliases()
+    {
+        return this.aliases;
+    }
 
-	public int getProtocolNumber()
-	{
-		return this.protocolNumber;
-	}
+    public int getProtocolNumber()
+    {
+        return this.protocolNumber;
+    }
 
-	@Override
-	public String toString()
-	{
-		StringBuilder string = new StringBuilder("{ name: \"");
-		string.append(this.name).
-				append( "\", aliases: ").
-				append(this.aliases).
-				append(", protocolNumber: ").
-				append(this.protocolNumber).append(" }");
+    @Override
+    public String toString()
+    {
+        StringBuilder string = new StringBuilder("{ name: \"");
+        string.append(this.name).
+                append( "\", aliases: ").
+                append(this.aliases).
+                append(", protocolNumber: ").
+                append(this.protocolNumber).append(" }");
 
-		return string.toString();
-	}
+        return string.toString();
+    }
 }

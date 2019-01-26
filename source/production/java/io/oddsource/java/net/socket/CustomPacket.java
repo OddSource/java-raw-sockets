@@ -34,85 +34,85 @@ import java.util.Arrays;
  */
 public class CustomPacket extends AbstractPacket
 {
-	private byte[] headerData = new byte[0];
+    private byte[] headerData = new byte[0];
 
-	private byte[] payloadData = new byte[0];
+    private byte[] payloadData = new byte[0];
 
-	public CustomPacket(Packet.Source source)
-	{
-		super(source);
-	}
+    public CustomPacket(Packet.Source source)
+    {
+        super(source);
+    }
 
-	/**
-	 * Gets the content of the packet IP header. A copy of the internal array is made to avoid external modification.
-	 *
-	 * @return the content of the packet IP header.
-	 */
-	@Override
-	public byte[] getHeaderData()
-	{
-		return Arrays.copyOf(this.headerData, this.headerData.length);
-	}
+    /**
+     * Gets the content of the packet IP header. A copy of the internal array is made to avoid external modification.
+     *
+     * @return the content of the packet IP header.
+     */
+    @Override
+    public byte[] getHeaderData()
+    {
+        return Arrays.copyOf(this.headerData, this.headerData.length);
+    }
 
-	/**
-	 * Sets the content of the packet IP header. A copy of the array argument is made to avoid external modification.
-	 *
-	 * @param headerData The content of the packet IP header
-	 * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
-	 */
-	public void setHeaderData(byte[] headerData) throws FinalizedPacketException
-	{
-		if(this.isFinalized())
-			throw new FinalizedPacketException();
+    /**
+     * Sets the content of the packet IP header. A copy of the array argument is made to avoid external modification.
+     *
+     * @param headerData The content of the packet IP header
+     * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
+     */
+    public void setHeaderData(byte[] headerData) throws FinalizedPacketException
+    {
+        if(this.isFinalized())
+            throw new FinalizedPacketException();
 
-		this.headerData = Arrays.copyOf(headerData, headerData.length);
-	}
+        this.headerData = Arrays.copyOf(headerData, headerData.length);
+    }
 
-	/**
-	 * Gets the content of the packet payload. A copy of the internal array is made to avoid external modification.
-	 *
-	 * @return the content of the packet payload.
-	 */
-	@Override
-	public byte[] getPayloadData()
-	{
-		return Arrays.copyOf(this.payloadData, this.payloadData.length);
-	}
+    /**
+     * Gets the content of the packet payload. A copy of the internal array is made to avoid external modification.
+     *
+     * @return the content of the packet payload.
+     */
+    @Override
+    public byte[] getPayloadData()
+    {
+        return Arrays.copyOf(this.payloadData, this.payloadData.length);
+    }
 
-	/**
-	 * Sets the content of the packet payload. A copy of the array argument is made to avoid external modification.
-	 *
-	 * @param payloadData The content of the packet payload
-	 * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
-	 */
-	@Override
-	public void setPayloadData(byte[] payloadData) throws FinalizedPacketException
-	{
-		if(this.isFinalized())
-			throw new FinalizedPacketException();
+    /**
+     * Sets the content of the packet payload. A copy of the array argument is made to avoid external modification.
+     *
+     * @param payloadData The content of the packet payload
+     * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
+     */
+    @Override
+    public void setPayloadData(byte[] payloadData) throws FinalizedPacketException
+    {
+        if(this.isFinalized())
+            throw new FinalizedPacketException();
 
-		this.payloadData = Arrays.copyOf(payloadData, payloadData.length);
-	}
+        this.payloadData = Arrays.copyOf(payloadData, payloadData.length);
+    }
 
-	/**
-	 * Gets the total header length.
-	 *
-	 * @return the IP header length, in bytes.
-	 */
-	@Override
-	public int getHeaderLength()
-	{
-		return this.headerData.length;
-	}
+    /**
+     * Gets the total header length.
+     *
+     * @return the IP header length, in bytes.
+     */
+    @Override
+    public int getHeaderLength()
+    {
+        return this.headerData.length;
+    }
 
-	/**
-	 * Gets the payload length();
-	 *
-	 * @return the payload length, in bytes.
-	 */
-	@Override
-	public int getPayloadLength()
-	{
-		return this.payloadData.length;
-	}
+    /**
+     * Gets the payload length();
+     *
+     * @return the payload length, in bytes.
+     */
+    @Override
+    public int getPayloadLength()
+    {
+        return this.payloadData.length;
+    }
 }

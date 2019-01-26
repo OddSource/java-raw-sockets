@@ -30,25 +30,25 @@ import java.net.SocketException;
 @SuppressWarnings("unused")
 public class RawSocketException extends SocketException
 {
-	public RawSocketException()
-	{
-		super();
-	}
+    public RawSocketException()
+    {
+        super();
+    }
 
-	public RawSocketException(String message)
-	{
-		super(message);
-	}
+    public RawSocketException(String message)
+    {
+        super(message);
+    }
 
-	public RawSocketException(Throwable cause)
-	{
-		super();
-		this.initCause(cause);
-	}
+    public RawSocketException(Throwable cause)
+    {
+        super();
+        this.initCause(cause);
+    }
 
-	public RawSocketException(String message, Throwable cause)
-	{
-		super(message);
-		this.initCause(cause);
-	}
+    public RawSocketException(String message, Throwable cause)
+    {
+        super(message);
+        this.initCause(cause);
+    }
 }

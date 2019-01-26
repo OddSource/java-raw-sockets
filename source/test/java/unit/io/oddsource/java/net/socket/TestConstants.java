@@ -29,90 +29,89 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
 
 /**
  * Test class for Constants.
  */
 public class TestConstants
 {
-	@BeforeClass
-	public static void setUpClass()
-	{
-		System.out.println("Property java.library.path is set to \"" + System.getProperty("java.library.path") + "\"");
-	}
+    @BeforeClass
+    public static void setUpClass()
+    {
+        System.out.println("Property java.library.path is set to \"" + System.getProperty("java.library.path") + "\"");
+    }
 
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testConstructionProhibited()
-			throws NoSuchMethodException, IllegalAccessException, InstantiationException
-	{
-		Constructor<Constants> constructor = Constants.class.getDeclaredConstructor();
-		constructor.setAccessible(true);
+    @Test
+    public void testConstructionProhibited()
+            throws NoSuchMethodException, IllegalAccessException, InstantiationException
+    {
+        Constructor<Constants> constructor = Constants.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
 
-		try
-		{
-			constructor.newInstance();
-			fail("Expected exception " + UnsupportedOperationException.class);
-		}
-		catch(InvocationTargetException e)
-		{
-			Throwable cause = e.getCause();
-			assertNotNull("There should be a call for exception " + e.toString(), cause);
-			assertEquals("The cause is not correct.", UnsupportedOperationException.class, cause.getClass());
-			assertEquals(
-					"The exception message is not correct.",
-					"This class is not meant to be instantiated.",
-					cause.getMessage()
-			);
-		}
-	}
+        try
+        {
+            constructor.newInstance();
+            fail("Expected exception " + UnsupportedOperationException.class);
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("There should be a call for exception " + e.toString(), cause);
+            assertEquals("The cause is not correct.", UnsupportedOperationException.class, cause.getClass());
+            assertEquals(
+                    "The exception message is not correct.",
+                    "This class is not meant to be instantiated.",
+                    cause.getMessage()
+            );
+        }
+    }
 
-	@Test
-	public void testSocketConstantNotDefinedException()
-			throws NoSuchMethodException, IllegalAccessException
-	{
-		Method method = Constants.class.getDeclaredMethod("registerNumericConstant", String.class);
-		method.setAccessible(true);
+    @Test
+    public void testSocketConstantNotDefinedException()
+            throws NoSuchMethodException, IllegalAccessException
+    {
+        Method method = Constants.class.getDeclaredMethod("registerNumericConstant", String.class);
+        method.setAccessible(true);
 
-		try
-		{
-			method.invoke(null, "BAD_CONSTANT");
-			fail("Expected exception " + SocketConstantNotDefinedException.class.getCanonicalName());
-		}
-		catch(InvocationTargetException e)
-		{
-			Throwable cause = e.getCause();
-			assertNotNull("There should be a call for exception " + e.toString(), cause);
-			assertEquals("The cause is not correct.", SocketConstantNotDefinedException.class, cause.getClass());
-			assertEquals(
-					"The exception message is not correct.",
-					"The specified constant, BAD_CONSTANT, is not natively defined.",
-					cause.getMessage()
-			);
-		}
-	}
+        try
+        {
+            method.invoke(null, "BAD_CONSTANT");
+            fail("Expected exception " + SocketConstantNotDefinedException.class.getCanonicalName());
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("There should be a call for exception " + e.toString(), cause);
+            assertEquals("The cause is not correct.", SocketConstantNotDefinedException.class, cause.getClass());
+            assertEquals(
+                    "The exception message is not correct.",
+                    "The specified constant, BAD_CONSTANT, is not natively defined.",
+                    cause.getMessage()
+            );
+        }
+    }
 
-	@Test
-	public void test_IP_OPTIONS()
-	{
-		assertThat("The constant IP_OPTIONS is not correct.", Constants.IP_OPTIONS, is(not(equalTo(0))));
-	}
+    @Test
+    public void test_IP_OPTIONS()
+    {
+        assertNotEquals("The constant IP_OPTIONS is not correct.", Constants.IP_OPTIONS, 0);
+    }
 
-	@Test
-	public void test_IP_HDRINCL()
-	{
-		assertThat("The constant IP_HDRINCL is not correct.", Constants.IP_HDRINCL, is(not(equalTo(0))));
-	}
+    @Test
+    public void test_IP_HDRINCL()
+    {
+        assertNotEquals("The constant IP_HDRINCL is not correct.", Constants.IP_HDRINCL, 0);
+    }
 }

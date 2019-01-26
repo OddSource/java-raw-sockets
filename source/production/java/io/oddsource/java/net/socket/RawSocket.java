@@ -27,31 +27,31 @@ package io.oddsource.java.net.socket;
  */
 public interface RawSocket
 {
-	public void setSocketOption(SocketLevel level, int option, int value);
+    public void setSocketOption(SocketLevel level, int option, int value);
 
-	public int getSocketOption(SocketLevel level, int option);
+    public int getSocketOption(SocketLevel level, int option);
 
-	public void setUseSelectTimeout(boolean useSelectTimeout);
+    public void setUseSelectTimeout(boolean useSelectTimeout);
 
-	public boolean getUseSelectTimeout();
+    public boolean getUseSelectTimeout();
 
-	public void setSendTimeout(int milliseconds);
+    public void setSendTimeout(int milliseconds);
 
-	public int getSendTimeout();
+    public int getSendTimeout();
 
-	public void setReceiveTimeout(int milliseconds);
+    public void setReceiveTimeout(int milliseconds);
 
-	public int getReceiveTimeout();
+    public int getReceiveTimeout();
 
-	public void setSendBufferSize(int bytes);
+    public void setSendBufferSize(int bytes);
 
-	public int getSendBufferSize();
+    public int getSendBufferSize();
 
-	public void setReceiveBufferSize(int bytes);
+    public void setReceiveBufferSize(int bytes);
 
-	public int getReceiveBufferSize();
+    public int getReceiveBufferSize();
 
-	public void setIpHeaderInclude(boolean on);
+    public void setIpHeaderInclude(boolean on);
 
-	public boolean getIpHeaderInclude();
+    public boolean getIpHeaderInclude();
 }

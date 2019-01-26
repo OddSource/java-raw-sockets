@@ -27,44 +27,44 @@ package io.oddsource.java.net.socket;
  */
 public class TimeoutValue
 {
-	private int seconds;
+    private int seconds;
 
-	private int microseconds;
+    private int microseconds;
 
-	public TimeoutValue()
-	{
-		this.seconds = this.microseconds = 0;
-	}
+    public TimeoutValue()
+    {
+        this.seconds = this.microseconds = 0;
+    }
 
-	public void setByMilliseconds(int milliseconds)
-	{
-		this.seconds = milliseconds / 1000;
+    public void setByMilliseconds(int milliseconds)
+    {
+        this.seconds = milliseconds / 1000;
 
-		if(this.seconds > 0)
-		{
-			milliseconds -= this.seconds * 1000;
-		}
+        if(this.seconds > 0)
+        {
+            milliseconds -= this.seconds * 1000;
+        }
 
-		this.microseconds = milliseconds * 1000;
-	}
+        this.microseconds = milliseconds * 1000;
+    }
 
-	public int getInMilliseconds()
-	{
-		return (this.seconds * 1000) + (this.microseconds / 1000);
-	}
+    public int getInMilliseconds()
+    {
+        return (this.seconds * 1000) + (this.microseconds / 1000);
+    }
 
-	public int getSeconds()
-	{
-		return this.seconds;
-	}
+    public int getSeconds()
+    {
+        return this.seconds;
+    }
 
-	public int getMicroseconds()
-	{
-		return this.microseconds;
-	}
+    public int getMicroseconds()
+    {
+        return this.microseconds;
+    }
 
-	boolean isZero()
-	{
-		return this.seconds == 0 && this.microseconds == 0;
-	}
+    boolean isZero()
+    {
+        return this.seconds == 0 && this.microseconds == 0;
+    }
 }

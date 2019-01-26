@@ -24,11 +24,11 @@ package io.oddsource.java.mock;
 @SuppressWarnings("unused")
 public class StateFlag
 {
-	public boolean state = false;
+    public boolean state = false;
 
-	@Override
-	public String toString()
-	{
-		return Boolean.toString(this.state);
-	}
+    @Override
+    public String toString()
+    {
+        return Boolean.toString(this.state);
+    }
 }
