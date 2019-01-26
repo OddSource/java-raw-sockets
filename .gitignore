@@ -3,4 +3,12 @@
 .travis.gpg
 target
 dist
-
+*.a
+*.dll
+*.dynlib
+*.exe
+*.lib
+*.o
+*.so
+*.so4
+*.so.4

@@ -310,7 +310,7 @@
 		<echo message="Manifest class-path is ${manifest.classpath.binary}" />
 
 		<!-- Package the JAR file -->
-		<jar destfile="${rawsockets.dir.artifactOutput}/net.nicholaswilliams.java.net.socket-binary-${rawsockets.version}.jar"
+		<jar destfile="${rawsockets.dir.artifactOutput}/io.oddsource.java.net.socket-binary-${rawsockets.version}.jar"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
@@ -347,7 +347,7 @@
 		<echo message="Manifest class-path is ${manifest.classpath.sources}" />
 
 		<!-- Package the JAR file -->
-		<jar destfile="${rawsockets.dir.artifactOutput}/net.nicholaswilliams.java.net.socket-sources-${rawsockets.version}.zip"
+		<jar destfile="${rawsockets.dir.artifactOutput}/io.oddsource.java.net.socket-sources-${rawsockets.version}.zip"
 			 duplicate="preserve" filesetmanifest="skip" index="false">
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
@@ -371,7 +371,7 @@
 		<mkdir dir="${rawsockets.dir.artifactOutput}" />
 
 		<!-- Package the JAR file -->
-		<zip destfile="${rawsockets.dir.artifactOutput}/net.nicholaswilliams.java.net.socket-javadoc-${rawsockets.version}.jar"
+		<zip destfile="${rawsockets.dir.artifactOutput}/io.oddsource.java.net.socket-javadoc-${rawsockets.version}.jar"
 			 duplicate="preserve">
 			<zipfileset dir="${rawsockets.dir.javaDoc}" />
 		</zip>
