@@ -251,9 +251,6 @@
                         <execution>
                             <id>compile-native-code</id>
                             <configuration>
-                                <compilerOutputDirectory>
-                                    source/production/resources/io/oddsource/java/net/socket
-                                </compilerOutputDirectory>
                                 <compilerStartOptions>
                                     <option>-Wall</option>
                                     <option>-O2</option>
