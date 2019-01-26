@@ -63,17 +63,17 @@ LIBRAWSOCKETS = $(LIBNAME).$(LIBEXTENSION)
 all: $(LIBRAWSOCKETS)
 
 %.o: %.cpp
-	@echo
-	@echo Target 1: Building $< to $@
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+    @echo
+    @echo Target 1: Building $< to $@
+    $(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 $(LIBRAWSOCKETS): $(OBJ)
-	@echo
-	@echo Target 2: Building $^ to $@
-	$(CC) $(SHARED) -o $@ $^ $(LDFLAGS)
+    @echo
+    @echo Target 2: Building $^ to $@
+    $(CC) $(SHARED) -o $@ $^ $(LDFLAGS)
 
 clean:
-	for extension in $(CLEAN_EXTENSIONS); do \
-		find . -name "*.$$extension" | xargs rm -f ; \
-	done
-	find . -name "*~" | xargs rm -f
+    for extension in $(CLEAN_EXTENSIONS); do \
+        find . -name "*.$$extension" | xargs rm -f ; \
+    done
+    find . -name "*~" | xargs rm -f

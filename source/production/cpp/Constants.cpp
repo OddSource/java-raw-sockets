@@ -65,35 +65,35 @@ static void populateConstantMap();
  * supported. If it is not supported, a SocketConstantNotDefinedException is raised.
  */
 JNIEXPORT jint JNICALL Java_io_oddsource_java_net_socket_Constants_registerNumericConstant
-	(JNIEnv *environment, jclass, jstring constantNameJstring)
+    (JNIEnv *environment, jclass, jstring constantNameJstring)
 {
-	if(constantMap.size() == 0)
-	{
-		populateConstantMap();
-	}
+    if(constantMap.size() == 0)
+    {
+        populateConstantMap();
+    }
 
-	jboolean isCopy;
-	const char* constantName = environment->GetStringUTFChars(constantNameJstring, &isCopy);
+    jboolean isCopy;
+    const char* constantName = environment->GetStringUTFChars(constantNameJstring, &isCopy);
 
-	int returnValue = 0;
-	if(constantMap.find(constantName) != constantMapEnd)
-	{
-		returnValue = constantMap[constantName];
-	}
-	else
-	{
-		std::string message("The specified constant, ");
-		message += constantName;
-		message += ", is not natively defined.";
+    int returnValue = 0;
+    if(constantMap.find(constantName) != constantMapEnd)
+    {
+        returnValue = constantMap[constantName];
+    }
+    else
+    {
+        std::string message("The specified constant, ");
+        message += constantName;
+        message += ", is not natively defined.";
 
-		environment->ThrowNew(
-			environment->FindClass("io/oddsource/java/net/socket/exception/SocketConstantNotDefinedException"),
-			message.c_str()
-		); /* this does not return, so we can wait to clean up below */
-	}
+        environment->ThrowNew(
+            environment->FindClass("io/oddsource/java/net/socket/exception/SocketConstantNotDefinedException"),
+            message.c_str()
+        ); /* this does not return, so we can wait to clean up below */
+    }
 
-	environment->ReleaseStringUTFChars(constantNameJstring, constantName);
-	return returnValue;
+    environment->ReleaseStringUTFChars(constantNameJstring, constantName);
+    return returnValue;
 }
 
 /*
@@ -102,50 +102,50 @@ JNIEXPORT jint JNICALL Java_io_oddsource_java_net_socket_Constants_registerNumer
 
 static void populateConstantMap()
 {
-	constantMap["IPPROTO_IP"]		= IPPROTO_IP;
-	constantMap["IPPROTO_IPIP"]		= IPPROTO_IPIP;
+    constantMap["IPPROTO_IP"]        = IPPROTO_IP;
+    constantMap["IPPROTO_IPIP"]        = IPPROTO_IPIP;
 #ifdef IPPROTO_IPV4
-	constantMap["IPPROTO_IPV4"]		= IPPROTO_IPV4;
+    constantMap["IPPROTO_IPV4"]        = IPPROTO_IPV4;
 #else
-	constantMap["IPPROTO_IPV4"]		= IPPROTO_IPIP;
+    constantMap["IPPROTO_IPV4"]        = IPPROTO_IPIP;
 #endif
-	constantMap["IPPROTO_IPV6"]		= IPPROTO_IPV6;
-	constantMap["IPPROTO_TCP"]		= IPPROTO_TCP;
-	constantMap["IPPROTO_UDP"]		= IPPROTO_UDP;
-	constantMap["IPPROTO_ICMP"]		= IPPROTO_ICMP;
+    constantMap["IPPROTO_IPV6"]        = IPPROTO_IPV6;
+    constantMap["IPPROTO_TCP"]        = IPPROTO_TCP;
+    constantMap["IPPROTO_UDP"]        = IPPROTO_UDP;
+    constantMap["IPPROTO_ICMP"]        = IPPROTO_ICMP;
 
-	constantMap["IP_HDRINCL"]		= IP_HDRINCL;
-	constantMap["IP_OPTIONS"]		= IP_OPTIONS;
-	constantMap["IP_RECVOPTS"]		= IP_RECVOPTS;
-	constantMap["IP_RECVRETOPTS"]	= IP_RECVRETOPTS;
-	constantMap["IP_TOS"]			= IP_TOS;
-	constantMap["IP_TTL"]			= IP_TTL;
+    constantMap["IP_HDRINCL"]        = IP_HDRINCL;
+    constantMap["IP_OPTIONS"]        = IP_OPTIONS;
+    constantMap["IP_RECVOPTS"]        = IP_RECVOPTS;
+    constantMap["IP_RECVRETOPTS"]    = IP_RECVRETOPTS;
+    constantMap["IP_TOS"]            = IP_TOS;
+    constantMap["IP_TTL"]            = IP_TTL;
 
-	/*
-	 * In Unix systems, IP_HDRINCL can be passed to setsockopt for IPv6 sockets, so IPV6_HDRINCL isn't defined. Windows
-	 * doesn't allow this, so it defines IPV6_HDRINCL. We want our Java code to be system independent, so we always
-	 * define this, and set it equal to IP_HDRINCL on systems that don't have IPV6_HDRINCL defined.
-	 */
+    /*
+     * In Unix systems, IP_HDRINCL can be passed to setsockopt for IPv6 sockets, so IPV6_HDRINCL isn't defined. Windows
+     * doesn't allow this, so it defines IPV6_HDRINCL. We want our Java code to be system independent, so we always
+     * define this, and set it equal to IP_HDRINCL on systems that don't have IPV6_HDRINCL defined.
+     */
 #ifdef IPV6_HDRINCL
-	constantMap["IPV6_HDRINCL"]		= IPV6_HDRINCL;
+    constantMap["IPV6_HDRINCL"]        = IPV6_HDRINCL;
 #else
-	constantMap["IPV6_HDRINCL"]		= IP_HDRINCL;
+    constantMap["IPV6_HDRINCL"]        = IP_HDRINCL;
 #endif
-	constantMap["IPV6_HOPLIMIT"]	= IPV6_HOPLIMIT;
-	constantMap["IPV6_MAXHLIM"]		= IPV6_MAXHLIM;
-	constantMap["IPV6_VERSION"]		= IPV6_VERSION;
+    constantMap["IPV6_HOPLIMIT"]    = IPV6_HOPLIMIT;
+    constantMap["IPV6_MAXHLIM"]        = IPV6_MAXHLIM;
+    constantMap["IPV6_VERSION"]        = IPV6_VERSION;
 
-	constantMap["SO_RCVBUF"]		= SO_RCVBUF;
-	constantMap["SO_RCVTIMEO"]		= SO_RCVTIMEO;
-	constantMap["SO_SNDBUF"]		= SO_SNDBUF;
-	constantMap["SO_SNDTIMEO"]		= SO_SNDTIMEO;
+    constantMap["SO_RCVBUF"]        = SO_RCVBUF;
+    constantMap["SO_RCVTIMEO"]        = SO_RCVTIMEO;
+    constantMap["SO_SNDBUF"]        = SO_SNDBUF;
+    constantMap["SO_SNDTIMEO"]        = SO_SNDTIMEO;
 
-	constantMap["SOL_SOCKET"]		= SOL_SOCKET;
+    constantMap["SOL_SOCKET"]        = SOL_SOCKET;
 
-	constantMap["AF_INET"]			= AF_INET;
-	constantMap["AF_INET6"]			= AF_INET6;
-	constantMap["PF_INET"]			= PF_INET;
-	constantMap["PF_INET6"]			= PF_INET6;
+    constantMap["AF_INET"]            = AF_INET;
+    constantMap["AF_INET6"]            = AF_INET6;
+    constantMap["PF_INET"]            = PF_INET;
+    constantMap["PF_INET6"]            = PF_INET6;
 
-	constantMapEnd = constantMap.end();
+    constantMapEnd = constantMap.end();
 }

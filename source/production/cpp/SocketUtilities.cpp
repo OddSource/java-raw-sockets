@@ -55,13 +55,13 @@ static jobject getProtocolObjectByProtocolStruct(JNIEnv *environment, struct pro
  * Looks up the protocol by its name, and returns null if it's not found.
  */
 JNIEXPORT jobject JNICALL Java_io_oddsource_java_net_socket_SocketUtilities_getProtocolByName
-	(JNIEnv *environment, jclass, jstring name)
+    (JNIEnv *environment, jclass, jstring name)
 {
-	const char *utf = environment->GetStringUTFChars(name, NULL);
-	struct protoent *protocol = getprotobyname(utf);
-	environment->ReleaseStringUTFChars(name, utf);
+    const char *utf = environment->GetStringUTFChars(name, NULL);
+    struct protoent *protocol = getprotobyname(utf);
+    environment->ReleaseStringUTFChars(name, utf);
 
-	return getProtocolObjectByProtocolStruct(environment, protocol);
+    return getProtocolObjectByProtocolStruct(environment, protocol);
 }
 
 /*
@@ -72,9 +72,9 @@ JNIEXPORT jobject JNICALL Java_io_oddsource_java_net_socket_SocketUtilities_getP
  * Looks up the protocol by its number, and returns null if it's not found.
  */
 JNIEXPORT jobject JNICALL Java_io_oddsource_java_net_socket_SocketUtilities_getProtocolByNumber
-	(JNIEnv *environment, jclass, jint number)
+    (JNIEnv *environment, jclass, jint number)
 {
-	return getProtocolObjectByProtocolStruct(environment, getprotobynumber(number));
+    return getProtocolObjectByProtocolStruct(environment, getprotobynumber(number));
 }
 
 /*
@@ -85,44 +85,44 @@ JNIEXPORT jobject JNICALL Java_io_oddsource_java_net_socket_SocketUtilities_getP
  * Compiles a list of all protocols supported by the system; returns an empty array if no protocols are found.
  */
 JNIEXPORT jobjectArray JNICALL Java_io_oddsource_java_net_socket_SocketUtilities_getProtocolList
-	(JNIEnv *environment, jclass SocketUtilities)
+    (JNIEnv *environment, jclass SocketUtilities)
 {
-	environment->MonitorEnter(SocketUtilities); // synchronize access to the protocol list methods
+    environment->MonitorEnter(SocketUtilities); // synchronize access to the protocol list methods
 
-	std::vector<jobject> protocolList;
+    std::vector<jobject> protocolList;
 
-	setprotoent(true);
+    setprotoent(true);
 
-	while(true)
-	{
-		struct protoent *protocol = getprotoent();
-		if(protocol == 0 || protocol == NULL)
-			break;
-		protocolList.push_back(getProtocolObjectByProtocolStruct(environment, protocol));
-	}
+    while(true)
+    {
+        struct protoent *protocol = getprotoent();
+        if(protocol == 0 || protocol == NULL)
+            break;
+        protocolList.push_back(getProtocolObjectByProtocolStruct(environment, protocol));
+    }
 
-	endprotoent();
+    endprotoent();
 
-	environment->MonitorExit(SocketUtilities); // end synchronization
+    environment->MonitorExit(SocketUtilities); // end synchronization
 
-	jclass Protocol = environment->FindClass("io/oddsource/java/net/socket/Protocol");
-	if(Protocol == 0)
-	{
-		environment->ThrowNew(
-			environment->FindClass("java/lang/ClassNotFoundException"),
-			"Could not find class io.oddsource.java.net.socket.Protocol."
-		);
-		return NULL;
-	}
+    jclass Protocol = environment->FindClass("io/oddsource/java/net/socket/Protocol");
+    if(Protocol == 0)
+    {
+        environment->ThrowNew(
+            environment->FindClass("java/lang/ClassNotFoundException"),
+            "Could not find class io.oddsource.java.net.socket.Protocol."
+        );
+        return NULL;
+    }
 
-	jobjectArray protocols = environment->NewObjectArray(protocolList.size(), Protocol, NULL);
+    jobjectArray protocols = environment->NewObjectArray(protocolList.size(), Protocol, NULL);
 
-	for(unsigned int i = 0; i < protocolList.size(); i++)
-	{
-		environment->SetObjectArrayElement(protocols, i, protocolList[i]);
-	}
+    for(unsigned int i = 0; i < protocolList.size(); i++)
+    {
+        environment->SetObjectArrayElement(protocols, i, protocolList[i]);
+    }
 
-	return protocols;
+    return protocols;
 }
 
 /*
@@ -131,39 +131,39 @@ JNIEXPORT jobjectArray JNICALL Java_io_oddsource_java_net_socket_SocketUtilities
 
 static jobject getProtocolObjectByProtocolStruct(JNIEnv *environment, struct protoent *protocol)
 {
-	if(protocol == 0 || protocol == NULL)
-		return NULL;
+    if(protocol == 0 || protocol == NULL)
+        return NULL;
 
-	jclass Protocol = environment->FindClass("io/oddsource/java/net/socket/Protocol");
-	if(Protocol == 0)
-	{
-		environment->ThrowNew(
-			environment->FindClass("java/lang/ClassNotFoundException"),
-			"Could not find class io.oddsource.java.net.socket.Protocol."
-		);
-		return NULL;
-	}
+    jclass Protocol = environment->FindClass("io/oddsource/java/net/socket/Protocol");
+    if(Protocol == 0)
+    {
+        environment->ThrowNew(
+            environment->FindClass("java/lang/ClassNotFoundException"),
+            "Could not find class io.oddsource.java.net.socket.Protocol."
+        );
+        return NULL;
+    }
 
-	jmethodID constructor = environment->GetMethodID(Protocol, "<init>", "(Ljava/lang/String;[Ljava/lang/String;I)V");
+    jmethodID constructor = environment->GetMethodID(Protocol, "<init>", "(Ljava/lang/String;[Ljava/lang/String;I)V");
 
-	if(constructor == 0)
-	{
-		environment->ThrowNew(
-			environment->FindClass("java/lang/NoSuchMethodError"),
-			"Could not find method <init>(String, String[], int) in class io.oddsource.java.net.socket.Protocol."
-		);
-		return NULL;
-	}
+    if(constructor == 0)
+    {
+        environment->ThrowNew(
+            environment->FindClass("java/lang/NoSuchMethodError"),
+            "Could not find method <init>(String, String[], int) in class io.oddsource.java.net.socket.Protocol."
+        );
+        return NULL;
+    }
 
-	jstring name = environment->NewStringUTF(protocol->p_name);
+    jstring name = environment->NewStringUTF(protocol->p_name);
 
-	int aliasesSize = sizeof(protocol->p_aliases) / sizeof(char *);
-	jobjectArray aliases = environment->NewObjectArray(aliasesSize, environment->FindClass("java/lang/String"), NULL);
+    int aliasesSize = sizeof(protocol->p_aliases) / sizeof(char *);
+    jobjectArray aliases = environment->NewObjectArray(aliasesSize, environment->FindClass("java/lang/String"), NULL);
 
-	for(int i = 0; i < aliasesSize; i++)
-	{
-		environment->SetObjectArrayElement(aliases, i, environment->NewStringUTF(protocol->p_aliases[i]));
-	}
+    for(int i = 0; i < aliasesSize; i++)
+    {
+        environment->SetObjectArrayElement(aliases, i, environment->NewStringUTF(protocol->p_aliases[i]));
+    }
 
-	return environment->NewObject(Protocol, constructor, name, aliases, protocol->p_proto);
+    return environment->NewObject(Protocol, constructor, name, aliases, protocol->p_proto);
 }
