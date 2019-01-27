@@ -29,13 +29,8 @@ import java.net.UnknownHostException;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class SocketUtilities
+public final class SocketUtilities extends DynamicNativeObject
 {
-    static
-    {
-        System.loadLibrary("rawsockets");
-    }
-
     /**
      * This class is not meant to be instantiated.
      */

@@ -25,14 +25,12 @@ package io.oddsource.java.net.socket;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class RawSocketImpl implements RawSocket
+public class RawSocketImpl extends DynamicNativeObject implements RawSocket
 {
     private static final int UNDEFINED = -1;
 
     static
     {
-        System.loadLibrary("rawsockets");
-
         RawSocketImpl.nativeStaticInitialize();
 
         Runtime.getRuntime().addShutdownHook(new Thread(RawSocketImpl::nativeStaticShutdown));
@@ -53,6 +51,8 @@ public class RawSocketImpl implements RawSocket
      */
     public RawSocketImpl()
     {
+        super();
+
         this.nativeSocketIdentifier = RawSocketImpl.UNDEFINED;
         this.sendTimeout = new TimeoutValue();
         this.receiveTimeout = new TimeoutValue();

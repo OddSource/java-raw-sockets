@@ -25,7 +25,7 @@ package io.oddsource.java.net.socket;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class Constants
+public final class Constants extends DynamicNativeObject
 {
     /*
      Protocol constants
@@ -203,8 +203,6 @@ public final class Constants
 
     static
     {
-        System.loadLibrary("rawsockets");
-
         IPPROTO_IP = Constants.registerNumericConstant("IPPROTO_IP");
         IPPROTO_IPIP = Constants.registerNumericConstant("IPPROTO_IPIP");
         IPPROTO_IPV4 = Constants.registerNumericConstant("IPPROTO_IPV4");

@@ -1,0 +1,91 @@
+package io.oddsource.java.net.socket;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.Locale;
+
+import io.oddsource.java.net.socket.exception.RawSocketRuntimeException;
+
+class DynamicNativeObject
+{
+    static final String OS_NAME = System.getProperty("os.name");
+
+    static final boolean OS_IS_WINDOWS = OS_NAME.startsWith("Windows");
+
+    static final boolean OS_IS_MAC = OS_NAME.startsWith("Mac");
+
+    static final boolean OS_IS_LINUX = OS_NAME.toLowerCase(Locale.US).startsWith("Linux");
+
+    // simplistic, might not be true 100% of the time, shouldn't matter for our purposes
+    static final boolean OS_IS_UNIX = !OS_IS_WINDOWS;
+
+    private static final String LIBRARY_NAME = "OddSourceRawSockets";
+
+    private static final String LIBRARY_PREFIX_UNIX = "lib";
+
+    private static final String LIBRARY_EXTENSION_NON_MAC_UNIX = ".so";
+
+    private static final String LIBRARY_EXTENSION_MAC = ".dylib";
+
+    private static final String LIBRARY_EXTENSION_WINDOWS = ".dll";
+
+    static
+    {
+        final String fileName;
+        final String fileExtension;
+        if(OS_IS_WINDOWS)
+        {
+            fileName = LIBRARY_NAME;
+            fileExtension = LIBRARY_EXTENSION_WINDOWS;
+        }
+        else
+        {
+            if(OS_IS_MAC)
+            {
+                fileName = LIBRARY_PREFIX_UNIX + LIBRARY_NAME;
+                fileExtension = LIBRARY_EXTENSION_MAC;
+            }
+            else
+            {
+                fileName = LIBRARY_PREFIX_UNIX + LIBRARY_NAME;
+                fileExtension = LIBRARY_EXTENSION_NON_MAC_UNIX;
+            }
+        }
+
+        try
+        {
+            final File tempFile = File.createTempFile(fileName, fileExtension);
+            tempFile.deleteOnExit();
+            if(!tempFile.exists())
+            {
+                throw new RawSocketRuntimeException(
+                    "Failed to create temporary file " + tempFile.getAbsolutePath() + "."
+                );
+            }
+
+            try(final InputStream input = DynamicNativeObject.class.getResourceAsStream(fileName + fileExtension))
+            {
+                Files.copy(input, tempFile.toPath());
+            }
+
+            System.load(tempFile.getAbsolutePath());
+        }
+        catch(final IOException e)
+        {
+            throw new RawSocketRuntimeException(
+                "Failed to load dynamic library " + fileName + fileExtension + " due to error.",
+                e
+            );
+        }
+    }
+
+    /**
+     * Constructor.
+     */
+    protected DynamicNativeObject()
+    {
+
+    }
+}
