@@ -158,8 +158,8 @@ public abstract class AbstractPacket implements Packet
      * Gets the packet source address. In many operating systems, you cannot specify a source address other than the IP
      * address of the interface the packet is leaving the machine through. In some operating systems, the transmission
      * will be prohibited; in others, the source address will simply be overridden (causing the checksum to fail
-     * verification).<br />
-     * <br />
+     * verification).<br>
+     * <br>
      * This field only exists for the purpose of representing incoming packets. For the purpose of outgoing packets,
      * the value of this field will be overwritten by the consumer of the packet.
      *
@@ -175,11 +175,11 @@ public abstract class AbstractPacket implements Packet
      * Sets the packet source address. In many operating systems, you cannot specify a source address other than the IP
      * address of the interface the packet is leaving the machine through. In some operating systems, the transmission
      * will be prohibited; in others, the source address will simply be overridden (causing the checksum to fail
-     * verification).<br />
-     * <br />
+     * verification).<br>
+     * <br>
      * This field only exists for the purpose of representing incoming packets. For the purpose of outgoing packets,
-     * the value of this field will be overwritten by the consumer of the packet.<br />
-     * <br />
+     * the value of this field will be overwritten by the consumer of the packet.<br>
+     * <br>
      * Subclasses <em>are strongly encouraged</em> to override this method and check that {@code sourceAddress} is-a
      * {@link java.net.Inet4Address} for IPv4 packets and is-a {@link java.net.Inet6Address} for IPv6 packets.
      *
@@ -228,8 +228,8 @@ public abstract class AbstractPacket implements Packet
     }
 
     /**
-     * Sets the packet destination address.<br />
-     * <br />
+     * Sets the packet destination address.<br>
+     * <br>
      * Subclasses <em>are strongly encouraged</em> to override this method and check that {@code destinationAddress}
      * is-a {@link java.net.Inet4Address} for IPv4 packets and is-a {@link java.net.Inet6Address} for IPv6 packets.
      *

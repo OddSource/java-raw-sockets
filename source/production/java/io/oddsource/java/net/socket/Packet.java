@@ -23,12 +23,12 @@ import io.oddsource.java.net.socket.exception.IllegalHopLimitException;
 /**
  * Specifies a strict interface and behavioral contract for all packet objects. The behavior defined in the comments
  * for each method should be adhered to strictly to fulfill this contract. More generally, the following rule should
- * be observed when any new mutator (setter) methods are added in any future implementations:<br />
- * <br />
+ * be observed when any new mutator (setter) methods are added in any future implementations:<br>
+ * <br>
  * If {@link #finalizePacket()} has previously been called, a {@link FinalizedPacketException} must be thrown. The
  * only exception to this is {@link #setSourceAddress(InetAddress)}, which should only throw this exception for
- * {@link Packet.Source#INCOMING} packets that have been finalized.<br />
- * <br />
+ * {@link Packet.Source#INCOMING} packets that have been finalized.<br>
+ * <br>
  * The default hop limit (IPv6) or time-to-live/TTL (IPv4) should be {@link #DEFAULT_HOP_LIMIT} if not otherwise
  * specified.
  *
@@ -135,8 +135,8 @@ public interface Packet
      * Gets the packet source address. In many operating systems, you cannot specify a source address other than the IP
      * address of the interface the packet is leaving the machine through. In some operating systems, the transmission
      * will be prohibited; in others, the source address will simply be overridden (causing the checksum to fail
-     * verification).<br />
-     * <br />
+     * verification).<br>
+     * <br>
      * This field only exists for the purpose of representing incoming packets. For the purpose of outgoing packets,
      * the value of this field will be overwritten by the consumer of the packet.
      *
@@ -148,8 +148,8 @@ public interface Packet
      * Sets the packet source address. In many operating systems, you cannot specify a source address other than the IP
      * address of the interface the packet is leaving the machine through. In some operating systems, the transmission
      * will be prohibited; in others, the source address will simply be overridden (causing the checksum to fail
-     * verification).<br />
-     * <br />
+     * verification).<br>
+     * <br>
      * This field only exists for the purpose of representing incoming packets. For the purpose of outgoing packets,
      * the value of this field will be overwritten by the consumer of the packet.
      *

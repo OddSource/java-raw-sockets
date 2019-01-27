@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 
 import io.oddsource.java.net.socket.exception.RawSocketRuntimeException;
@@ -82,7 +83,7 @@ class DynamicNativeObject
 
             try(final InputStream input = DynamicNativeObject.class.getResourceAsStream(fileName + fileExtension))
             {
-                Files.copy(input, tempFile.toPath());
+                Files.copy(input, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
 
             System.load(tempFile.getAbsolutePath());

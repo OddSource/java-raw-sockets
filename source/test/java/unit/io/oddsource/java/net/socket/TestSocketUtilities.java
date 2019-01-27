@@ -52,13 +52,13 @@ public class TestSocketUtilities
         try
         {
             constructor.newInstance();
-            fail("Expected exception " + UnsupportedOperationException.class);
+            fail("Expected exception " + AssertionError.class);
         }
         catch(InvocationTargetException e)
         {
             Throwable cause = e.getCause();
             assertNotNull("There should be a call for exception " + e.toString(), cause);
-            assertEquals("The cause is not correct.", UnsupportedOperationException.class, cause.getClass());
+            assertEquals("The cause is not correct.", AssertionError.class, cause.getClass());
             assertEquals(
                 "The exception message is not correct.",
                 "This class is not meant to be instantiated.",

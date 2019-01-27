@@ -28,7 +28,7 @@ set -e
 
 if [[ ! -f "${DIR}/target/.bash_history" ]]
 then
-    echo "mvn install -DskipTests -V -e -Dcompile.native=true" > "${DIR}/target/.bash_history"
+    echo "mvn install -V -e -Dcompile.native=true" > "${DIR}/target/.bash_history"
 fi
 
 docker build --tag "oddsource/raw-sockets:$1" --file "Dockerfile-jdk$1" .
