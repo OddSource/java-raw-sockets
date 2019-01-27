@@ -40,7 +40,7 @@
 
 #endif /* if defined(_WIN32) else */
 
-#include "SocketUtilities.h"
+#include "io_oddsource_java_net_socket_SocketUtilities.h"
 
 static jobject getProtocolObjectByProtocolStruct(JNIEnv *environment, struct protoent *protocol);
 

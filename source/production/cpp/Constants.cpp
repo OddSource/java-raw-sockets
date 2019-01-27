@@ -47,7 +47,7 @@
 
 #endif /* if defined(_WIN32) else */
 
-#include "Constants.h"
+#include "io_oddsource_java_net_socket_Constants.h"
 
 std::map<std::string, int> constantMap;
 std::map<std::string, int>::iterator constantMapEnd;

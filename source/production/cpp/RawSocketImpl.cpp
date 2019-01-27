@@ -47,7 +47,7 @@
 #define SOCKET_ERROR -1
 #endif
 
-#include "RawSocketImpl.h"
+#include "io_oddsource_java_net_socket_RawSocketImpl.h"
 
 static void raiseError(JNIEnv * environment, std::string error, std::string message);
 static void handleSocketError(JNIEnv *environment);

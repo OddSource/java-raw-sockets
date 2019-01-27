@@ -189,11 +189,17 @@
                     <version>${version.plugin.compiler}</version>
                     <executions>
                         <execution>
-                            <id>compile-productionsources</id>
+                            <id>compile-production-sources</id>
                             <goals>
                                 <goal>compile</goal>
                             </goals>
                             <phase>compile</phase>
+                            <configuration>
+                                <compilerArgs>
+                                    <arg>-h</arg>
+                                    <arg>source/production/cpp</arg>
+                                </compilerArgs>
+                            </configuration>
                         </execution>
                         <execution>
                             <id>compile-test-sources</id>
@@ -223,7 +229,7 @@
                     <artifactId>native-maven-plugin</artifactId>
                     <version>${version.plugin.native}</version>
                     <executions>
-                        <execution>
+                        <!--<execution>
                             <id>regenerate-header-files</id>
                             <configuration>
                                 <javahIncludes>
@@ -247,7 +253,7 @@
                                 <goal>javah</goal>
                             </goals>
                             <phase>compile</phase>
-                        </execution>
+                        </execution>-->
                         <execution>
                             <id>compile-native-code</id>
                             <configuration>
