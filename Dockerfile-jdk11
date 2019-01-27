@@ -15,9 +15,8 @@ RUN cd /opt && \
     mvn --version
 
 WORKDIR /srv/oddsource/raw-sockets/
-COPY build /srv/oddsource/raw-sockets/build
-COPY source /srv/oddsource/raw-sockets/source
-COPY pom.xml /srv/oddsource/raw-sockets/pom.xml
-RUN rm -fv /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.so \
+COPY . /srv/oddsource/raw-sockets/
+RUN rm -rf /srv/oddsource/raw-sockets/target \
+    /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.so \
     /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.dylib \
     /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.dll
