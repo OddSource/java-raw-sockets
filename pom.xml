@@ -28,7 +28,7 @@
 
     <groupId>io.oddsource.java.net.socket</groupId>
     <artifactId>raw-sockets</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>OddSource Code Java Raw Sockets</name>
     <version>1.0.0-M1-SNAPSHOT</version>
@@ -169,6 +169,7 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${version.plugin.spotbugs}</version>
                     <configuration>
                         <effort>Max</effort>
                         <excludeFilterFile>build/spotbugs-exclude.xml</excludeFilterFile>
@@ -187,6 +188,20 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${version.plugin.compiler}</version>
+                    <configuration>
+                        <fork>true</fork>
+                        <maxmem>${project.tasks.maximum.memory}</maxmem>
+                        <source>${javac.source.version}</source>
+                        <target>${javac.target.version}</target>
+                        <debug>true</debug>
+                        <debuglevel>lines,source</debuglevel>
+                        <compilerArguments>
+                            <Xmaxerrs>10000</Xmaxerrs>
+                            <Xmaxwarns>10000</Xmaxwarns>
+                            <Xlint />
+                            <Werror />
+                        </compilerArguments>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>compile-production-sources</id>
@@ -209,51 +224,12 @@
                             <phase>test-compile</phase>
                         </execution>
                     </executions>
-                    <configuration>
-                        <fork>true</fork>
-                        <maxmem>${project.tasks.maximum.memory}</maxmem>
-                        <source>${javac.source.version}</source>
-                        <target>${javac.target.version}</target>
-                        <debug>true</debug>
-                        <debuglevel>lines,source</debuglevel>
-                        <compilerArguments>
-                            <Xmaxerrs>10000</Xmaxerrs>
-                            <Xmaxwarns>10000</Xmaxwarns>
-                            <Xlint />
-                            <Werror />
-                        </compilerArguments>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>native-maven-plugin</artifactId>
                     <version>${version.plugin.native}</version>
                     <executions>
-                        <!--<execution>
-                            <id>regenerate-header-files</id>
-                            <configuration>
-                                <javahIncludes>
-                                    <javahInclude>
-                                        <className>io.oddsource.java.net.socket.Constants</className>
-                                        <headerName>Constants.h</headerName>
-                                    </javahInclude>
-                                    <javahInclude>
-                                        <className>io.oddsource.java.net.socket.RawSocketImpl</className>
-                                        <headerName>RawSocketImpl.h</headerName>
-                                    </javahInclude>
-                                    <javahInclude>
-                                        <className>io.oddsource.java.net.socket.SocketUtilities</className>
-                                        <headerName>SocketUtilities.h</headerName>
-                                    </javahInclude>
-                                </javahIncludes>
-                                <javahOutputDirectory>source/production/cpp</javahOutputDirectory>
-                                <javahVerbose>true</javahVerbose>
-                            </configuration>
-                            <goals>
-                                <goal>javah</goal>
-                            </goals>
-                            <phase>compile</phase>
-                        </execution>-->
                         <execution>
                             <id>compile-native-code</id>
                             <configuration>
@@ -288,39 +264,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--<plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>${version.plugin.exec}</version>
-                    <executions>
-                        <execution>
-                            <id>regenerate-header-files</id>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>exec</goal>
-                            </goals>
-                            <configuration>
-                                <arguments>
-                                    <argument>hello</argument>
-                                </arguments>
-                                <executable>echo</executable>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>compile-cpp</id>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>exec</goal>
-                            </goals>
-                            <configuration>
-                                <arguments>
-                                    <argument>goodbye</argument>
-                                </arguments>
-                                <executable>echo</executable>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -334,6 +277,53 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>${version.plugin.source}</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>true</addMavenDescriptor>
+                            <compress>true</compress>
+                            <forced>true</forced>
+                            <index>true</index>
+                            <manifest>
+                                <addClasspath>false</addClasspath>
+                                <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+                                <addExtensions>false</addExtensions>
+                            </manifest>
+                            <manifestEntries>
+                                <Manifest-Version>1.0</Manifest-Version>
+                                <Name>${project.groupId}</Name>
+                                <Java-Vendor>${java.vendor}</Java-Vendor>
+                                <Java-Version>${java.version}</Java-Version>
+                                <Java-Specification>${java.specification.name}</Java-Specification>
+                                <Java-Specification-Vendor>${java.specification.vendor}</Java-Specification-Vendor>
+                                <Java-Specification-Version>${java.specification.version}</Java-Specification-Version>
+                                <Built-By>Travis</Built-By>
+                                <Created-By>Travis</Created-By>
+                                <Specification-Title>${project.groupId}</Specification-Title>
+                                <Specification-Version>${project.version}</Specification-Version>
+                                <Specification-Vendor>${project.organization.name}</Specification-Vendor>
+                                <Specification-Vendor-Id>${project.parent.groupId}</Specification-Vendor-Id>
+                                <Implementation-Title>${project.name}</Implementation-Title>
+                                <Implementation-Version>${project.version}</Implementation-Version>
+                                <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                                <Implementation-Vendor-Id>${project.parent.groupId}</Implementation-Vendor-Id>
+                                <Implementation-Build-Date>${maven.build.timestamp}</Implementation-Build-Date>
+                                <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+                                <X-Compile-Source-JDK>${javac.source.version}</X-Compile-Source-JDK>
+                                <X-Compile-Target-JDK>${javac.target.version}</X-Compile-Target-JDK>
+                                <Sealed>false</Sealed>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-sources</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -376,6 +366,32 @@
                                 <X-Compile-Target-JDK>${javac.target.version}</X-Compile-Target-JDK>
                                 <Sealed>false</Sealed>
                             </manifestEntries>
+                            <manifestSections>
+                                <manifestSection>
+                                    <name>io/oddsource/java/net/socket</name>
+                                    <manifestEntries>
+                                        <Sealed>true</Sealed>
+                                    </manifestEntries>
+                                </manifestSection>
+                                <manifestSection>
+                                    <name>io/oddsource/java/net/socket/exception</name>
+                                    <manifestEntries>
+                                        <Sealed>true</Sealed>
+                                    </manifestEntries>
+                                </manifestSection>
+                                <manifestSection>
+                                    <name>io/oddsource/java/net/socket/ip4</name>
+                                    <manifestEntries>
+                                        <Sealed>true</Sealed>
+                                    </manifestEntries>
+                                </manifestSection>
+                                <manifestSection>
+                                    <name>io/oddsource/java/net/socket/ip6</name>
+                                    <manifestEntries>
+                                        <Sealed>true</Sealed>
+                                    </manifestEntries>
+                                </manifestSection>
+                            </manifestSections>
                         </archive>
                     </configuration>
                 </plugin>
@@ -459,6 +475,15 @@
                         <version>true</version>
                         <windowtitle><![CDATA[${project.name} ${project.version} API Documentation]]></windowtitle>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-javadoc</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -467,66 +492,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>make-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <archive>
-                        <addMavenDescriptor>true</addMavenDescriptor>
-                        <compress>true</compress>
-                        <forced>true</forced>
-                        <index>true</index>
-                        <manifest>
-                            <addClasspath>false</addClasspath>
-                            <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
-                            <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
-                            <addExtensions>false</addExtensions>
-                        </manifest>
-                        <manifestEntries>
-                            <Manifest-Version>1.0</Manifest-Version>
-                            <Name>${project.groupId}</Name>
-                            <Java-Vendor>${java.vendor}</Java-Vendor>
-                            <Java-Version>${java.version}</Java-Version>
-                            <Java-Specification>${java.specification.name}</Java-Specification>
-                            <Java-Specification-Vendor>${java.specification.vendor}</Java-Specification-Vendor>
-                            <Java-Specification-Version>${java.specification.version}</Java-Specification-Version>
-                            <Built-By>Travis</Built-By>
-                            <Created-By>Travis</Created-By>
-                            <Specification-Title>${project.groupId}</Specification-Title>
-                            <Specification-Version>${project.version}</Specification-Version>
-                            <Specification-Vendor>${project.organization.name}</Specification-Vendor>
-                            <Specification-Vendor-Id>${project.parent.groupId}</Specification-Vendor-Id>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-                            <Implementation-Vendor-Id>${project.parent.groupId}</Implementation-Vendor-Id>
-                            <Implementation-Build-Date>${maven.build.timestamp}</Implementation-Build-Date>
-                            <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-                            <X-Compile-Source-JDK>${javac.source.version}</X-Compile-Source-JDK>
-                            <X-Compile-Target-JDK>${javac.target.version}</X-Compile-Target-JDK>
-                            <Sealed>false</Sealed>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>make-javadoc</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
