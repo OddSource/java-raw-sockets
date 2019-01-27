@@ -19,7 +19,7 @@
 package io.oddsource.java.net.socket.ip6;
 
 /**
- * Class description here.
+ * Class description here. TODO
  *
  * @author Nick Williams
  * @version 1.0.0
@@ -27,4 +27,11 @@ package io.oddsource.java.net.socket.ip6;
  */
 public class GenericIp6Packet
 {
+    /**
+     * Constructor.
+     */
+    public GenericIp6Packet()
+    {
+
+    }
 }

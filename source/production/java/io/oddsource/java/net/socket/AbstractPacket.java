@@ -18,11 +18,11 @@
 
 package io.oddsource.java.net.socket;
 
-import io.oddsource.java.net.socket.exception.FinalizedPacketException;
-import io.oddsource.java.net.socket.exception.IllegalHopLimitException;
-
 import java.net.InetAddress;
 import java.util.Arrays;
+
+import io.oddsource.java.net.socket.exception.FinalizedPacketException;
+import io.oddsource.java.net.socket.exception.IllegalHopLimitException;
 
 /**
  * An abstract implementation of {@link Packet} that implements common methods and/or methods that should not be
@@ -34,7 +34,7 @@ import java.util.Arrays;
  */
 public abstract class AbstractPacket implements Packet
 {
-    protected final Packet.Source source;
+    private final Packet.Source source;
 
     private boolean finalized;
 
@@ -44,7 +44,12 @@ public abstract class AbstractPacket implements Packet
 
     private InetAddress destinationAddress;
 
-    public AbstractPacket(Packet.Source source)
+    /**
+     * Constructor.
+     *
+     * @param source The source of this packet.
+     */
+    public AbstractPacket(final Packet.Source source)
     {
         this.source = source;
     }
@@ -58,10 +63,10 @@ public abstract class AbstractPacket implements Packet
     @Override
     public byte[] getPacketData()
     {
-        byte[] header = this.getHeaderData();
-        byte[] payload = this.getPayloadData();
+        final byte[] header = this.getHeaderData();
+        final byte[] payload = this.getPayloadData();
 
-        byte[] data = Arrays.copyOf(header, header.length + payload.length);
+        final byte[] data = Arrays.copyOf(header, header.length + payload.length);
         System.arraycopy(payload, 0, data, header.length, payload.length);
         return data;
     }
@@ -95,19 +100,25 @@ public abstract class AbstractPacket implements Packet
      * Sets the hop limit (IPv6 terminology) or the Time-To-Live (IPv4 terminology). By whatever term, this is
      * (unofficially in IPv4) the maximum number of hops the packet is allowed to make to its destination before a TTL
      * exceeded message should be returned. This value must be between 1 and 255 (and the implementing class should
-     * throw an IllegalHopLimitException otherwise), but is represented as a short due to the absence of unsigned numbers in Java.
+     * throw an IllegalHopLimitException otherwise), but is represented as a short due to the absence of unsigned
+     * numbers in Java.
      *
      * @param hopLimit The hop limit / TTL
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      * @throws IllegalHopLimitException if {@code hopLimit} was not an integer between 1 and 255 (inclusive).
      */
     @Override
-    public final void setHopLimit(short hopLimit) throws FinalizedPacketException, IllegalHopLimitException
+    public final void setHopLimit(final short hopLimit) throws FinalizedPacketException, IllegalHopLimitException
     {
         if(this.isFinalized())
+        {
             throw new FinalizedPacketException();
+        }
         if(hopLimit < Packet.MIN_HOP_LIMIT || hopLimit > Packet.MAX_HOP_LIMIT)
+        {
             throw new IllegalHopLimitException();
+        }
 
         this.hopLimit = hopLimit;
     }
@@ -176,18 +187,28 @@ public abstract class AbstractPacket implements Packet
      * {@link java.net.Inet4Address} for IPv4 packets and is-a {@link java.net.Inet6Address} for IPv6 packets.
      *
      * @param sourceAddress The source address that the packet originated from
-     * @return {@code true} if this packet is of source {@link io.oddsource.java.net.socket.Packet.Source#INCOMING} and setting the address is allowed, {@code false} if this packet is of source {@link io.oddsource.java.net.socket.Packet.Source#OUTGOING} and setting the address is not allowed.
-     * @throws FinalizedPacketException if this packet is of source {@link io.oddsource.java.net.socket.Packet.Source#INCOMING} and was finalized prior to the invocation of this method.
+     *
+     * @return {@code true} if this packet is of source {@link io.oddsource.java.net.socket.Packet.Source#INCOMING} and
+     *     setting the address is allowed, {@code false} if this packet is of source {@link
+     *     io.oddsource.java.net.socket.Packet.Source#OUTGOING} and setting the address is not allowed.
+     *
+     * @throws FinalizedPacketException if this packet is of source
+     * {@link io.oddsource.java.net.socket.Packet.Source#INCOMING}
+     *     and was finalized prior to the invocation of this method.
      */
     @Override
-    public boolean setSourceAddress(InetAddress sourceAddress) throws FinalizedPacketException
+    public boolean setSourceAddress(final InetAddress sourceAddress) throws FinalizedPacketException
     {
         if(this.source == Packet.Source.INCOMING)
         {
             if(this.isFinalized())
+            {
                 throw new FinalizedPacketException();
+            }
             if(sourceAddress == null)
+            {
                 throw new IllegalArgumentException("Parameter sourceAddress cannot be null!");
+            }
 
             this.sourceAddress = sourceAddress;
             return true;
@@ -216,15 +237,20 @@ public abstract class AbstractPacket implements Packet
      * is-a {@link java.net.Inet4Address} for IPv4 packets and is-a {@link java.net.Inet6Address} for IPv6 packets.
      *
      * @param destinationAddress The packet destination address
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      */
     @Override
-    public void setDestinationAddress(InetAddress destinationAddress) throws FinalizedPacketException
+    public void setDestinationAddress(final InetAddress destinationAddress) throws FinalizedPacketException
     {
         if(this.isFinalized())
+        {
             throw new FinalizedPacketException();
+        }
         if(destinationAddress == null)
-                throw new IllegalArgumentException("Parameter sourceAddress cannot be null!");
+        {
+            throw new IllegalArgumentException("Parameter destinationAddress cannot be null!");
+        }
 
         this.destinationAddress = destinationAddress;
     }

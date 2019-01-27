@@ -29,22 +29,44 @@ package io.oddsource.java.net.socket.exception;
 @SuppressWarnings("unused")
 public class IllegalHopLimitException extends RawSocketRuntimeException
 {
+    /**
+     * Constructor.
+     */
     public IllegalHopLimitException()
     {
         this("The hop limit (IPv6) or time-to-live/TTL (IPv4) must be an integer between 1 and 255 (inclusive).");
     }
 
-    public IllegalHopLimitException(String message)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
+    public IllegalHopLimitException(final String message)
     {
         super(message);
     }
 
-    public IllegalHopLimitException(Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
+    public IllegalHopLimitException(final Throwable cause)
     {
-        this("The hop limit (IPv6) or time-to-live/TTL (IPv4) must be an integer between 1 and 255 (inclusive).", cause);
+        this(
+            "The hop limit (IPv6) or time-to-live/TTL (IPv4) must be an integer between 1 and 255 (inclusive).",
+            cause
+        );
     }
 
-    public IllegalHopLimitException(String message, Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
+    public IllegalHopLimitException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

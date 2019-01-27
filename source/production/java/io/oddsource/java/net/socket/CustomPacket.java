@@ -18,9 +18,9 @@
 
 package io.oddsource.java.net.socket;
 
-import io.oddsource.java.net.socket.exception.FinalizedPacketException;
-
 import java.util.Arrays;
+
+import io.oddsource.java.net.socket.exception.FinalizedPacketException;
 
 /**
  * A naïve implementation of {@link Packet} that uses the raw header and payload byte arrays and takes them for granted
@@ -38,7 +38,12 @@ public class CustomPacket extends AbstractPacket
 
     private byte[] payloadData = new byte[0];
 
-    public CustomPacket(Packet.Source source)
+    /**
+     * Constructor.
+     *
+     * @param source Whether this is an incoming our outgoing packet.
+     */
+    public CustomPacket(final Packet.Source source)
     {
         super(source);
     }
@@ -58,12 +63,15 @@ public class CustomPacket extends AbstractPacket
      * Sets the content of the packet IP header. A copy of the array argument is made to avoid external modification.
      *
      * @param headerData The content of the packet IP header
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      */
-    public void setHeaderData(byte[] headerData) throws FinalizedPacketException
+    public void setHeaderData(final byte[] headerData) throws FinalizedPacketException
     {
         if(this.isFinalized())
+        {
             throw new FinalizedPacketException();
+        }
 
         this.headerData = Arrays.copyOf(headerData, headerData.length);
     }
@@ -83,13 +91,16 @@ public class CustomPacket extends AbstractPacket
      * Sets the content of the packet payload. A copy of the array argument is made to avoid external modification.
      *
      * @param payloadData The content of the packet payload
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      */
     @Override
-    public void setPayloadData(byte[] payloadData) throws FinalizedPacketException
+    public void setPayloadData(final byte[] payloadData) throws FinalizedPacketException
     {
         if(this.isFinalized())
+        {
             throw new FinalizedPacketException();
+        }
 
         this.payloadData = Arrays.copyOf(payloadData, payloadData.length);
     }
@@ -106,7 +117,7 @@ public class CustomPacket extends AbstractPacket
     }
 
     /**
-     * Gets the payload length();
+     * Gets the payload length.
      *
      * @return the payload length, in bytes.
      */

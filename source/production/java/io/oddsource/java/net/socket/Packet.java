@@ -18,10 +18,10 @@
 
 package io.oddsource.java.net.socket;
 
+import java.net.InetAddress;
+
 import io.oddsource.java.net.socket.exception.FinalizedPacketException;
 import io.oddsource.java.net.socket.exception.IllegalHopLimitException;
-
-import java.net.InetAddress;
 
 /**
  * Specifies a strict interface and behavioral contract for all packet objects. The behavior defined in the comments
@@ -42,12 +42,27 @@ import java.net.InetAddress;
 public interface Packet
 {
     /**
+     * The minimum allowed hop limit.
+     */
+    public static final short MIN_HOP_LIMIT = 1;
+
+    /**
+     * The default hop limit.
+     */
+    public static final short DEFAULT_HOP_LIMIT = 60;
+
+    /**
+     * The maximum allowed hop limit.
+     */
+    public static final short MAX_HOP_LIMIT = 255;
+
+    /**
      * Returns the entire packet represented in bytes. To fulfill the contract for this method, the implementing class
      * should return the concatenated return values from (1) {@link #getHeaderData()} and (2) {@link #getPayloadData()}.
      *
      * @return the entire packet (header followed by content).
      */
-    public byte[] getPacketData();
+    public abstract byte[] getPacketData();
 
     /**
      * Gets the content of the packet IP header. A copy of the internal array, if one exists, must be made to avoid
@@ -55,7 +70,7 @@ public interface Packet
      *
      * @return the content of the packet IP header.
      */
-    public byte[] getHeaderData();
+    public abstract byte[] getHeaderData();
 
     /**
      * Gets the content of the packet payload. A copy of the internal array, if one exists, must be made to avoid
@@ -63,36 +78,37 @@ public interface Packet
      *
      * @return the content of the packet payload.
      */
-    public byte[] getPayloadData();
+    public abstract byte[] getPayloadData();
 
     /**
      * Sets the content of the packet payload. A copy of the array argument must be made to avoid external modification.
      *
      * @param payloadData The content of the packet payload
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      */
-    public void setPayloadData(byte [] payloadData) throws FinalizedPacketException;
+    public abstract void setPayloadData(byte[] payloadData) throws FinalizedPacketException;
 
     /**
      * Gets the total packet length (header + payload).
      *
      * @return the packet length, in bytes.
      */
-    public int getPacketLength();
+    public abstract int getPacketLength();
 
     /**
      * Gets the total header length.
      *
      * @return the IP header length, in bytes.
      */
-    public int getHeaderLength();
+    public abstract int getHeaderLength();
 
     /**
-     * Gets the payload length();
+     * Gets the payload length.
      *
      * @return the payload length, in bytes.
      */
-    public int getPayloadLength();
+    public abstract int getPayloadLength();
 
     /**
      * Gets the hop limit (IPv6 terminology) or the Time-To-Live (IPv4 terminology). By whatever term, this is
@@ -102,19 +118,21 @@ public interface Packet
      *
      * @return the hop limit / TTL.
      */
-    public short getHopLimit();
+    public abstract short getHopLimit();
 
     /**
      * Sets the hop limit (IPv6 terminology) or the Time-To-Live (IPv4 terminology). By whatever term, this is
      * (unofficially in IPv4) the maximum number of hops the packet is allowed to make to its destination before a TTL
      * exceeded message should be returned. This value must be between 1 and 255 (and the implementing class should
-     * throw an IllegalHopLimitException otherwise), but is represented as a short due to the absence of unsigned numbers in Java.
+     * throw an IllegalHopLimitException otherwise), but is represented as a short due to the absence of unsigned
+     * numbers in Java.
      *
      * @param hopLimit The hop limit / TTL
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      * @throws IllegalHopLimitException if {@code hopLimit} was not an integer between 1 and 255 (inclusive).
      */
-    public void setHopLimit(short hopLimit) throws FinalizedPacketException, IllegalHopLimitException;
+    public abstract void setHopLimit(short hopLimit) throws FinalizedPacketException, IllegalHopLimitException;
 
     /**
      * Gets the packet source address. In many operating systems, you cannot specify a source address other than the IP
@@ -127,7 +145,7 @@ public interface Packet
      *
      * @return the source address that the packet originated from.
      */
-    public InetAddress getSourceAddress();
+    public abstract InetAddress getSourceAddress();
 
     /**
      * Sets the packet source address. In many operating systems, you cannot specify a source address other than the IP
@@ -139,38 +157,43 @@ public interface Packet
      * the value of this field will be overwritten by the consumer of the packet.
      *
      * @param sourceAddress The source address that the packet originated from
-     * @return {@code true} if this packet is of source {@link Source#INCOMING} and setting the address is allowed, {@code false} if this packet is of source {@link Source#OUTGOING} and setting the address is not allowed.
-     * @throws FinalizedPacketException if this packet is of source {@link Source#INCOMING} and was finalized prior to the invocation of this method.
+     *
+     * @return {@code true} if this packet is of source {@link Source#INCOMING} and setting the address is allowed,
+     *     {@code false} if this packet is of source {@link Source#OUTGOING} and setting the address is not allowed.
+     *
+     * @throws FinalizedPacketException if this packet is of source {@link Source#INCOMING} and was finalized prior
+     *     to the invocation of this method.
      */
-    public boolean setSourceAddress(InetAddress sourceAddress) throws FinalizedPacketException;
+    public abstract boolean setSourceAddress(InetAddress sourceAddress) throws FinalizedPacketException;
 
     /**
      * Gets the packet destination address.
      *
      * @return the packet destination address.
      */
-    public InetAddress getDestinationAddress();
+    public abstract InetAddress getDestinationAddress();
 
     /**
      * Gets the packet destination address.
      *
      * @param destinationAddress The packet destination address
+     *
      * @throws FinalizedPacketException if this packet was finalized prior to the invocation of this method.
      */
-    public void setDestinationAddress(InetAddress destinationAddress) throws FinalizedPacketException;
+    public abstract void setDestinationAddress(InetAddress destinationAddress) throws FinalizedPacketException;
 
     /**
      * Protects this packet against future modification. This method will be called when an incoming packet has been
      * received and parsing completed. If this packet has already been finalized, this method should be a no-op.
      */
-    public void finalizePacket();
+    public abstract void finalizePacket();
 
     /**
      * Indicates whether this packed has been protected against future modification.
      *
      * @return {@code true} if this packet has been protected, {@code false} otherwise.
      */
-    public boolean isFinalized();
+    public abstract boolean isFinalized();
 
     /**
      * Gets the source of this packet (incoming or outgoing). To fulfill the contract of this interface, the source of
@@ -179,17 +202,22 @@ public interface Packet
      *
      * @return the source of this packet.
      */
-    public Packet.Source getSource();
+    public abstract Packet.Source getSource();
 
     /**
      * The source of the packet, indicating whether it is incoming (it has been received) or outgoing (it is meant for
      * transmission).
      */
-    public static enum Source { INCOMING, OUTGOING }
+    public static enum Source
+    {
+        /**
+         * This is an incoming packet that has been received.
+         */
+        INCOMING,
 
-    public static final short MIN_HOP_LIMIT = 1;
-
-    public static final short DEFAULT_HOP_LIMIT = 60;
-
-    public static final short MAX_HOP_LIMIT = 255;
+        /**
+         * This is an outgoing packet that is to be sent.
+         */
+        OUTGOING,
+    }
 }

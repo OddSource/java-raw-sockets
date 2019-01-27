@@ -19,7 +19,7 @@
 package io.oddsource.java.net.socket;
 
 /**
- * Class description here.
+ * An enum for indicating the level at which socket options apply.
  *
  * @author Nick Williams
  * @version 1.0.0
@@ -28,30 +28,63 @@ package io.oddsource.java.net.socket;
 @SuppressWarnings("unused")
 public enum SocketLevel
 {
+    /**
+     * Indicates the socket itself for IPv4 and IPv6 packets.
+     */
     SOCKET(Constants.SOL_SOCKET, true),
+
+    /**
+     * Indicates the IP layer for only IPv4 packets.
+     */
     IP(Constants.SOL_IP, false),
+
+    /**
+     * Indicates the IP layer for only IPv6 packets.
+     */
     IPv6(Constants.SOL_IPV6, true),
+
+    /**
+     * Indicates the TCP layer for IPv4 and IPv6 packets.
+     */
     TCP(Constants.SOL_TCP, true),
+
+    /**
+     * Indicates the UDP layer for IPv4 and IPv6 packets.
+     */
     UDP(Constants.SOL_UDP, true),
+
+    /**
+     * Indicates the ICMP layer for IPv4 and IPv6 packets.
+     */
     ICMP(Constants.IPPROTO_ICMP, true);
 
     private final int osConstant;
 
-    private final boolean supportsIp6;
+    private final boolean supportsIPv6;
 
-    private SocketLevel(int osConstant, boolean supportsIp6)
+    SocketLevel(final int osConstant, final boolean supportsIPv6)
     {
         this.osConstant = osConstant;
-        this.supportsIp6 = supportsIp6;
+        this.supportsIPv6 = supportsIPv6;
     }
 
+    /**
+     * Get the OS constant for this level.
+     *
+     * @return the OS constant.
+     */
     public int getOsConstant()
     {
         return osConstant;
     }
 
-    public boolean isSupportsIp6()
+    /**
+     * Indicates whether this level supports IPv6.
+     *
+     * @return whether it supports IPv6.
+     */
+    public boolean supportsIPv6()
     {
-        return supportsIp6;
+        return this.supportsIPv6;
     }
 }

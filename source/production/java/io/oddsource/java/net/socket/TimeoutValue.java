@@ -19,7 +19,7 @@
 package io.oddsource.java.net.socket;
 
 /**
- * Class description here.
+ * A simple object representing timeouts in a helpful way..
  *
  * @author Nick Williams
  * @version 1.0.0
@@ -27,42 +27,74 @@ package io.oddsource.java.net.socket;
  */
 public class TimeoutValue
 {
+    private static final short MULTIPLIER = 1000;
+
     private int seconds;
 
     private int microseconds;
 
+    /**
+     * Constructor.
+     */
     public TimeoutValue()
     {
-        this.seconds = this.microseconds = 0;
+        this.seconds = 0;
+        this.microseconds = 0;
     }
 
-    public void setByMilliseconds(int milliseconds)
+    /**
+     * Set the timeout by milliseconds.
+     *
+     * @param milliseconds The number of milliseconds
+     */
+    public void setByMilliseconds(final int milliseconds)
     {
-        this.seconds = milliseconds / 1000;
+        this.seconds = milliseconds / TimeoutValue.MULTIPLIER;
 
+        int leftover = milliseconds;
         if(this.seconds > 0)
         {
-            milliseconds -= this.seconds * 1000;
+            leftover -= this.seconds * TimeoutValue.MULTIPLIER;
         }
 
-        this.microseconds = milliseconds * 1000;
+        this.microseconds = leftover * TimeoutValue.MULTIPLIER;
     }
 
+    /**
+     * Get the timeout represented in milliseconds.
+     *
+     * @return the timeout in milliseconds.
+     */
     public int getInMilliseconds()
     {
-        return (this.seconds * 1000) + (this.microseconds / 1000);
+        return (this.seconds * TimeoutValue.MULTIPLIER) + (this.microseconds / TimeoutValue.MULTIPLIER);
     }
 
+    /**
+     * Get the seconds component of the timeout.
+     *
+     * @return the timeout seconds.
+     */
     public int getSeconds()
     {
         return this.seconds;
     }
 
+    /**
+     * Get the microseconds component of the timeout.
+     *
+     * @return the timeout microseconds.
+     */
     public int getMicroseconds()
     {
         return this.microseconds;
     }
 
+    /**
+     * Determine whether the timeout is zero.
+     *
+     * @return whether the timeout is zero.
+     */
     boolean isZero()
     {
         return this.seconds == 0 && this.microseconds == 0;

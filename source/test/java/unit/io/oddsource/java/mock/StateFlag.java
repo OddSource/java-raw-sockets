@@ -24,7 +24,7 @@ package io.oddsource.java.mock;
 @SuppressWarnings("unused")
 public class StateFlag
 {
-    public boolean state = false;
+    public boolean state;
 
     @Override
     public String toString()

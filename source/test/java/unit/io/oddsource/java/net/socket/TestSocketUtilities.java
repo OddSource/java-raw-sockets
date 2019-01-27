@@ -18,15 +18,15 @@
 
 package io.oddsource.java.net.socket;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test class for .
@@ -47,7 +47,7 @@ public class TestSocketUtilities
 
     @Test
     public void testConstructionProhibited()
-            throws NoSuchMethodException, IllegalAccessException, InstantiationException
+        throws NoSuchMethodException, IllegalAccessException, InstantiationException
     {
         Constructor<SocketUtilities> constructor = SocketUtilities.class.getDeclaredConstructor();
         constructor.setAccessible(true);
@@ -63,9 +63,9 @@ public class TestSocketUtilities
             assertNotNull("There should be a call for exception " + e.toString(), cause);
             assertEquals("The cause is not correct.", UnsupportedOperationException.class, cause.getClass());
             assertEquals(
-                    "The exception message is not correct.",
-                    "This class is not meant to be instantiated.",
-                    cause.getMessage()
+                "The exception message is not correct.",
+                "This class is not meant to be instantiated.",
+                cause.getMessage()
             );
         }
     }
@@ -184,21 +184,29 @@ public class TestSocketUtilities
         assertNotNull("The list of protocols should not be null.", protocols);
         assertThat("The list of protocols is not long enough.", protocols.length, is(greaterThan(3)));
 
-        boolean foundIp   = false;
-        boolean foundTcp  = false;
-        boolean foundUdp  = false;
+        boolean foundIp = false;
+        boolean foundTcp = false;
+        boolean foundUdp = false;
         boolean foundIcmp = false;
 
         for(Protocol protocol : protocols)
         {
             if(protocol.getName().equalsIgnoreCase("ip"))
+            {
                 foundIp = true;
+            }
             else if(protocol.getName().equalsIgnoreCase("tcp"))
+            {
                 foundTcp = true;
+            }
             else if(protocol.getName().equalsIgnoreCase("udp"))
+            {
                 foundUdp = true;
+            }
             else if(protocol.getName().equalsIgnoreCase("icmp"))
+            {
                 foundIcmp = true;
+            }
         }
 
         assertTrue("The IP protocol should be in the list.", foundIp);

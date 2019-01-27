@@ -20,6 +20,11 @@
     "-//Puppy Crawl//DTD Suppressions 1.0//EN"
     "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
 <suppressions>
+    <suppress files="SocketLevel.java" checks="AbbreviationAsWordInName" />
+    <suppress files="TestConstants.java" checks="AbbreviationAsWordInName" />
+
+    <suppress files="exception/[A-Za-z0-9]+\.java" checks="MultipleStringLiterals" />
+
     <suppress files="source/test" checks="AnonInnerLength" />
     <suppress files="source/test" checks="AvoidStarImport" />
     <suppress files="source/test" checks="AvoidStaticImport" />

@@ -18,17 +18,18 @@
 
 package io.oddsource.java.net.socket;
 
-import io.oddsource.java.net.socket.exception.SocketConstantNotDefinedException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import io.oddsource.java.net.socket.exception.SocketConstantNotDefinedException;
 
 /**
  * Test class for Constants.
@@ -55,7 +56,7 @@ public class TestConstants
 
     @Test
     public void testConstructionProhibited()
-            throws NoSuchMethodException, IllegalAccessException, InstantiationException
+        throws NoSuchMethodException, IllegalAccessException, InstantiationException
     {
         Constructor<Constants> constructor = Constants.class.getDeclaredConstructor();
         constructor.setAccessible(true);
@@ -71,16 +72,16 @@ public class TestConstants
             assertNotNull("There should be a call for exception " + e.toString(), cause);
             assertEquals("The cause is not correct.", UnsupportedOperationException.class, cause.getClass());
             assertEquals(
-                    "The exception message is not correct.",
-                    "This class is not meant to be instantiated.",
-                    cause.getMessage()
+                "The exception message is not correct.",
+                "This class is not meant to be instantiated.",
+                cause.getMessage()
             );
         }
     }
 
     @Test
     public void testSocketConstantNotDefinedException()
-            throws NoSuchMethodException, IllegalAccessException
+        throws NoSuchMethodException, IllegalAccessException
     {
         Method method = Constants.class.getDeclaredMethod("registerNumericConstant", String.class);
         method.setAccessible(true);
@@ -96,9 +97,9 @@ public class TestConstants
             assertNotNull("There should be a call for exception " + e.toString(), cause);
             assertEquals("The cause is not correct.", SocketConstantNotDefinedException.class, cause.getClass());
             assertEquals(
-                    "The exception message is not correct.",
-                    "The specified constant, BAD_CONSTANT, is not natively defined.",
-                    cause.getMessage()
+                "The exception message is not correct.",
+                "The specified constant, BAD_CONSTANT, is not natively defined.",
+                cause.getMessage()
             );
         }
     }

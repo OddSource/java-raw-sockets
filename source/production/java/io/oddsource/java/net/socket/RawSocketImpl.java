@@ -27,27 +27,16 @@ package io.oddsource.java.net.socket;
  */
 public class RawSocketImpl implements RawSocket
 {
+    private static final int UNDEFINED = -1;
+
     static
     {
         System.loadLibrary("rawsockets");
 
         RawSocketImpl.nativeStaticInitialize();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(
-                new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        RawSocketImpl.nativeStaticShutdown();
-                    }
-                }
-            ));
+        Runtime.getRuntime().addShutdownHook(new Thread(RawSocketImpl::nativeStaticShutdown));
     }
-    private static native void nativeStaticInitialize();
-    private static native void nativeStaticShutdown();
-
-    private static final int UNDEFINED = -1;
 
     private int nativeSocketIdentifier;
 
@@ -59,25 +48,45 @@ public class RawSocketImpl implements RawSocket
 
     private final TimeoutValue receiveTimeout;
 
+    /**
+     * Constructor.
+     */
     public RawSocketImpl()
     {
-        this.nativeSocketIdentifier = UNDEFINED;
+        this.nativeSocketIdentifier = RawSocketImpl.UNDEFINED;
         this.sendTimeout = new TimeoutValue();
         this.receiveTimeout = new TimeoutValue();
 
-        String os = System.getProperty("os.name");
-
+        final String os = System.getProperty("os.name");
         if(os != null && os.startsWith("SunOS"))
+        {
             setUseSelectTimeout(true);
+        }
         else
+        {
             setUseSelectTimeout(false);
+        }
     }
 
+    private static native void nativeStaticInitialize();
+
+    private static native void nativeStaticShutdown();
+
+    /**
+     * Gets the identifier / file descriptor for the native socket.
+     *
+     * @return the identifier.
+     */
     protected final int getNativeSocketIdentifier()
     {
         return this.nativeSocketIdentifier;
     }
 
+    /**
+     * Get the IP version for the native socket.
+     *
+     * @return the IP version.
+     */
     protected final IpVersion getIpVersion()
     {
         return this.ipVersion;
@@ -88,6 +97,16 @@ public class RawSocketImpl implements RawSocket
     {
         this.setSocketOption(this.getNativeSocketIdentifier(), level.getOsConstant(), option, value);
     }
+
+    /**
+     * Set the specified socket option at the given level to the given value.
+     *
+     * @param socket The socket identifier / file descriptor.
+     * @param level The level to which the socket option applies, such as the socket itself, the IP layer, the UDP
+     *     layer, etc.
+     * @param option The option identifier (an integer, but be sure to always use one of the supported constants)
+     * @param value The option value
+     */
     protected native void setSocketOption(int socket, int level, int option, int value);
 
     @Override
@@ -95,10 +114,21 @@ public class RawSocketImpl implements RawSocket
     {
         return this.getSocketOption(this.getNativeSocketIdentifier(), level.getOsConstant(), option);
     }
+
+    /**
+     * Get the specified socket option at the given level.
+     *
+     * @param socket The socket identifier / file descriptor.
+     * @param level The level to which the socket option applies, such as the socket itself, the IP layer, the UDP
+     *     layer, etc.
+     * @param option The option identifier (an integer, but be sure to always use one of the supported constants)
+     *
+     * @return the option value.
+     */
     protected native int getSocketOption(int socket, int level, int option);
 
     @Override
-    public void setUseSelectTimeout(boolean useSelectTimeout)
+    public void setUseSelectTimeout(final boolean useSelectTimeout)
     {
         this.useSelectTimeout = useSelectTimeout;
     }
@@ -109,16 +139,46 @@ public class RawSocketImpl implements RawSocket
         return this.useSelectTimeout;
     }
 
+    /**
+     * Set the given send or receive timeout in milliseconds.
+     *
+     * @param option Whether this is send or receive
+     * @param milliseconds The timeout in milliseconds.
+     */
     protected void setTimeout(final int option, final int milliseconds)
     {
         this.setTimeout(this.getNativeSocketIdentifier(), option, milliseconds);
     }
+
+    /**
+     * Set the given send or receive timeout in milliseconds.
+     *
+     * @param socket The socket identifier / file descriptor.
+     * @param option Whether this is send or receive
+     * @param milliseconds The timeout in milliseconds.
+     */
     protected native void setTimeout(int socket, int option, int milliseconds);
 
+    /**
+     * Get the given send or receive timeout in milliseconds.
+     *
+     * @param option Whether this is send or receive
+     *
+     * @return the timeout in milliseconds.
+     */
     protected int getTimeout(final int option)
     {
         return getTimeout(this.getNativeSocketIdentifier(), option);
     }
+
+    /**
+     * Get the given send or receive timeout in milliseconds.
+     *
+     * @param socket The socket identifier / file descriptor.
+     * @param option Whether this is send or receive
+     *
+     * @return the timeout in milliseconds.
+     */
     protected native int getTimeout(int socket, int option);
 
     @Override
@@ -127,15 +187,17 @@ public class RawSocketImpl implements RawSocket
         this.sendTimeout.setByMilliseconds(milliseconds);
 
         if(!this.getUseSelectTimeout())
+        {
             this.setTimeout(Constants.SO_SNDTIMEO, milliseconds);
+        }
     }
 
     @Override
     public int getSendTimeout()
     {
         return this.getUseSelectTimeout() ?
-                    this.sendTimeout.getInMilliseconds() :
-                    this.getTimeout(Constants.SO_SNDTIMEO);
+               this.sendTimeout.getInMilliseconds() :
+               this.getTimeout(Constants.SO_SNDTIMEO);
     }
 
     @Override
@@ -144,15 +206,17 @@ public class RawSocketImpl implements RawSocket
         this.receiveTimeout.setByMilliseconds(milliseconds);
 
         if(!this.getUseSelectTimeout())
+        {
             this.setTimeout(Constants.SO_RCVTIMEO, milliseconds);
+        }
     }
 
     @Override
     public int getReceiveTimeout()
     {
         return this.getUseSelectTimeout() ?
-                    this.receiveTimeout.getInMilliseconds() :
-                    this.getTimeout(Constants.SO_RCVTIMEO);
+               this.receiveTimeout.getInMilliseconds() :
+               this.getTimeout(Constants.SO_RCVTIMEO);
     }
 
     @Override
@@ -185,17 +249,25 @@ public class RawSocketImpl implements RawSocket
         final int value = on ? 1 : 0;
 
         if(this.getIpVersion() == IpVersion.IPv6)
+        {
             this.setSocketOption(SocketLevel.IPv6, Constants.IPV6_HDRINCL, value);
+        }
         else
+        {
             this.setSocketOption(SocketLevel.IP, Constants.IP_HDRINCL, value);
+        }
     }
 
     @Override
     public boolean getIpHeaderInclude()
     {
         if(this.getIpVersion() == IpVersion.IPv6)
+        {
             return this.getSocketOption(SocketLevel.IPv6, Constants.IPV6_HDRINCL) == 1;
+        }
         else
+        {
             return this.getSocketOption(SocketLevel.IP, Constants.IP_HDRINCL) == 1;
+        }
     }
 }

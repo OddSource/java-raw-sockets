@@ -19,7 +19,7 @@
 package io.oddsource.java.net.socket.ip4;
 
 /**
- * Class description here.
+ * Class description here. TODO
  *
  * @author Nick Williams
  * @version 1.0.0
@@ -27,4 +27,11 @@ package io.oddsource.java.net.socket.ip4;
  */
 public class Icmp4Packet
 {
+    /**
+     * Constructor.
+     */
+    public Icmp4Packet()
+    {
+
+    }
 }

@@ -24,10 +24,10 @@ import java.net.UnknownHostException;
 /**
  * A collection of network utilities that don't belong to any particular object definition.
  *
+ * @see Protocol
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
- * @see Protocol
  */
 public final class SocketUtilities
 {
@@ -37,9 +37,18 @@ public final class SocketUtilities
     }
 
     /**
+     * This class is not meant to be instantiated.
+     */
+    private SocketUtilities()
+    {
+        throw new AssertionError("This class is not meant to be instantiated.");
+    }
+
+    /**
      * Looks up the protocol by its name, and returns null if it's not found.
      *
      * @param name The name of the protocol to lookup
+     *
      * @return the protocol named by {@code name}, or null if it wasn't found.
      */
     public static native Protocol getProtocolByName(String name);
@@ -48,6 +57,7 @@ public final class SocketUtilities
      * Looks up the protocol by its number, and returns null if it's not found.
      *
      * @param number The number of the protocol to lookup
+     *
      * @return the protocol numbered {@code number}, or null if it wasn't found.
      */
     public static native Protocol getProtocolByNumber(int number);
@@ -59,7 +69,16 @@ public final class SocketUtilities
      */
     public static native Protocol[] getProtocolList();
 
-    public static InetAddress getSourceAddressForDestination(InetAddress destination) throws UnknownHostException
+    /**
+     * Get the source address for the destination.
+     *
+     * @param destination The destination address
+     *
+     * @return the source address.
+     *
+     * @throws UnknownHostException If the destination host cannot be resolved
+     */
+    public static InetAddress getSourceAddressForDestination(final InetAddress destination) throws UnknownHostException
     {
         throw new UnsupportedOperationException("Not implemented yet.");
         /*int family = (destination instanceof Inet6Address) ?
@@ -73,12 +92,4 @@ public final class SocketUtilities
         );*/
     }
     //public static native byte[] getSourceAddressForDestination(byte[] destination, int addressFormatFamily);
-
-    /**
-     * This class is not meant to be instantiated.
-     */
-    private SocketUtilities()
-    {
-        throw new UnsupportedOperationException("This class is not meant to be instantiated.");
-    }
 }

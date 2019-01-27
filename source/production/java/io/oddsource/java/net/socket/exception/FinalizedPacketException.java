@@ -29,22 +29,41 @@ package io.oddsource.java.net.socket.exception;
 @SuppressWarnings("unused")
 public class FinalizedPacketException extends RawSocketRuntimeException
 {
+    /**
+     * Constructor.
+     */
     public FinalizedPacketException()
     {
         this("This packet has been finalized and cannot be altered. It is now a \"mutable\" object.");
     }
 
-    public FinalizedPacketException(String message)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
+    public FinalizedPacketException(final String message)
     {
         super(message);
     }
 
-    public FinalizedPacketException(Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
+    public FinalizedPacketException(final Throwable cause)
     {
         this("This packet has been finalized and cannot be altered. It is now a \"mutable\" object.", cause);
     }
 
-    public FinalizedPacketException(String message, Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
+    public FinalizedPacketException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

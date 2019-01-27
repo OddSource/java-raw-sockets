@@ -19,12 +19,19 @@
 package io.oddsource.java.net.socket.ip4;
 
 /**
- * Class description here.
+ * Class description here. TODO
  *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
  */
-public class GerenicIp4Packet
+public class GenericIp4Packet
 {
+    /**
+     * Constructor.
+     */
+    public GenericIp4Packet()
+    {
+
+    }
 }

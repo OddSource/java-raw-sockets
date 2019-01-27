@@ -18,17 +18,18 @@
 
 package io.oddsource.java.net.socket;
 
-import io.oddsource.java.net.socket.exception.FinalizedPacketException;
-import io.oddsource.java.net.socket.exception.IllegalHopLimitException;
+import static org.junit.Assert.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import static org.junit.Assert.*;
+import io.oddsource.java.net.socket.exception.FinalizedPacketException;
+import io.oddsource.java.net.socket.exception.IllegalHopLimitException;
 
 /**
  * Test class for AbstractPacket.
@@ -96,7 +97,11 @@ public class TestAbstractPacket
         byte[] data = this.packet.getPacketData();
 
         assertNotNull("The data should not be null.", data);
-        assertArrayEquals("The data is not correct.", new byte[] {0x01, 0x05, 0x15, 0x01, 0x00, 0x79, 0x03, 0x04, 0x05, 0x06}, data);
+        assertArrayEquals(
+            "The data is not correct.",
+            new byte[] {0x01, 0x05, 0x15, 0x01, 0x00, 0x79, 0x03, 0x04, 0x05, 0x06},
+            data
+        );
     }
 
     @Test
@@ -112,7 +117,11 @@ public class TestAbstractPacket
         byte[] data = this.packet.getPacketData();
 
         assertNotNull("The data should not be null.", data);
-        assertArrayEquals("The data is not correct.", new byte[] {0x03, 0x04, 0x05, 0x06, 0x01, 0x05, 0x15, 0x01, 0x00, 0x79}, data);
+        assertArrayEquals(
+            "The data is not correct.",
+            new byte[] {0x03, 0x04, 0x05, 0x06, 0x01, 0x05, 0x15, 0x01, 0x00, 0x79},
+            data
+        );
     }
 
     @Test
@@ -159,27 +168,27 @@ public class TestAbstractPacket
         assertTrue("The packet should still be finalized.", this.packet.isFinalized());
     }
 
-    @Test(expected=IllegalHopLimitException.class)
+    @Test(expected = IllegalHopLimitException.class)
     public void testHopLimit01()
     {
         this.setUpPacket();
 
         EasyMock.replay(this.packet);
 
-        this.packet.setHopLimit((short)(Packet.MIN_HOP_LIMIT - 1));
+        this.packet.setHopLimit((short) (Packet.MIN_HOP_LIMIT - 1));
     }
 
-    @Test(expected=IllegalHopLimitException.class)
+    @Test(expected = IllegalHopLimitException.class)
     public void testHopLimit02()
     {
         this.setUpPacket();
 
         EasyMock.replay(this.packet);
 
-        this.packet.setHopLimit((short)(Packet.MAX_HOP_LIMIT + 1));
+        this.packet.setHopLimit((short) (Packet.MAX_HOP_LIMIT + 1));
     }
 
-    @Test(expected=FinalizedPacketException.class)
+    @Test(expected = FinalizedPacketException.class)
     public void testHopLimit03()
     {
         this.setUpPacket();
@@ -233,12 +242,12 @@ public class TestAbstractPacket
 
         EasyMock.replay(this.packet);
 
-        this.packet.setHopLimit((short)97);
+        this.packet.setHopLimit((short) 97);
 
         assertEquals("The hop limit is not correct.", 97, this.packet.getHopLimit());
     }
 
-    @Test(expected=FinalizedPacketException.class)
+    @Test(expected = FinalizedPacketException.class)
     public void testSourceAddress01() throws UnknownHostException
     {
         this.setUpPacket(Packet.Source.INCOMING);
@@ -249,7 +258,7 @@ public class TestAbstractPacket
         this.packet.setSourceAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02})); // 4.2.2.2
     }
 
-    @Test(expected=FinalizedPacketException.class)
+    @Test(expected = FinalizedPacketException.class)
     public void testSourceAddress02() throws UnknownHostException
     {
         this.setUpPacket(Packet.Source.INCOMING);
@@ -260,7 +269,7 @@ public class TestAbstractPacket
         this.packet.setSourceAddress(InetAddress.getLocalHost()); // 127.0.0.1 or 0::0
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSourceAddress03()
     {
         this.setUpPacket(Packet.Source.INCOMING);
@@ -277,8 +286,9 @@ public class TestAbstractPacket
 
         EasyMock.replay(this.packet);
 
-        assertFalse("Setting should have failed.",
-                    this.packet.setSourceAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02}))
+        assertFalse(
+            "Setting should have failed.",
+            this.packet.setSourceAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02}))
         ); // 4.2.2.2
     }
 
@@ -289,8 +299,9 @@ public class TestAbstractPacket
 
         EasyMock.replay(this.packet);
 
-        assertFalse("Setting should have failed.",
-                    this.packet.setSourceAddress(InetAddress.getLocalHost())
+        assertFalse(
+            "Setting should have failed.",
+            this.packet.setSourceAddress(InetAddress.getLocalHost())
         ); // 127.0.0.1 or 0::0
     }
 
@@ -311,11 +322,13 @@ public class TestAbstractPacket
 
         EasyMock.replay(this.packet);
 
-        assertTrue("Setting should have succeeded.",
-                    this.packet.setSourceAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02}))
+        assertTrue(
+            "Setting should have succeeded.",
+            this.packet.setSourceAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02}))
         ); // 4.2.2.2
         assertEquals("The address is not correct.", InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02}),
-                     this.packet.getSourceAddress());
+                     this.packet.getSourceAddress()
+        );
     }
 
     @Test
@@ -325,13 +338,14 @@ public class TestAbstractPacket
 
         EasyMock.replay(this.packet);
 
-        assertTrue("Setting should have succeeded.",
-                    this.packet.setSourceAddress(InetAddress.getLocalHost())
+        assertTrue(
+            "Setting should have succeeded.",
+            this.packet.setSourceAddress(InetAddress.getLocalHost())
         ); // 127.0.0.1 or 0::0
         assertEquals("The address is not correct.", InetAddress.getLocalHost(), this.packet.getSourceAddress());
     }
 
-    @Test(expected=FinalizedPacketException.class)
+    @Test(expected = FinalizedPacketException.class)
     public void testDestinationAddress01() throws UnknownHostException
     {
         this.setUpPacket(Packet.Source.INCOMING);
@@ -342,7 +356,7 @@ public class TestAbstractPacket
         this.packet.setDestinationAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02})); // 4.2.2.2
     }
 
-    @Test(expected=FinalizedPacketException.class)
+    @Test(expected = FinalizedPacketException.class)
     public void testDestinationAddress02() throws UnknownHostException
     {
         this.setUpPacket(Packet.Source.INCOMING);
@@ -353,7 +367,7 @@ public class TestAbstractPacket
         this.packet.setDestinationAddress(InetAddress.getLocalHost()); // 127.0.0.1 or 0::0
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testDestinationAddress03()
     {
         this.setUpPacket(Packet.Source.INCOMING);
@@ -372,7 +386,8 @@ public class TestAbstractPacket
 
         this.packet.setDestinationAddress(InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02})); // 4.2.2.2
         assertEquals("The address is not correct.", InetAddress.getByAddress(new byte[] {0x04, 0x02, 0x02, 0x02}),
-                     this.packet.getDestinationAddress());
+                     this.packet.getDestinationAddress()
+        );
     }
 
     @Test

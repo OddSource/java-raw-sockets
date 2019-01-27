@@ -29,22 +29,41 @@ package io.oddsource.java.net.socket.exception;
 @SuppressWarnings("unused")
 public class SocketConstantNotDefinedException extends RawSocketRuntimeException
 {
+    /**
+     * Constructor.
+     */
     public SocketConstantNotDefinedException()
     {
         this("The specified socket constant is not defined.");
     }
 
-    public SocketConstantNotDefinedException(String message)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
+    public SocketConstantNotDefinedException(final String message)
     {
         super(message);
     }
 
-    public SocketConstantNotDefinedException(Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
+    public SocketConstantNotDefinedException(final Throwable cause)
     {
         this("The specified socket constant is not defined.", cause);
     }
 
-    public SocketConstantNotDefinedException(String message, Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
+    public SocketConstantNotDefinedException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

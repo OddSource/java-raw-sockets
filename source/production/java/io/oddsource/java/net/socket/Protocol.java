@@ -24,10 +24,10 @@ import java.util.List;
 /**
  * This POJO represents protocol information as retrieved from the underlying operating system.
  *
+ * @see SocketUtilities
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
- * @see SocketUtilities
  */
 public final class Protocol
 {
@@ -37,37 +37,65 @@ public final class Protocol
 
     private final int protocolNumber;
 
-    public Protocol(String name, String[] aliases, int protocolNumber)
+    /**
+     * Constructor.
+     *
+     * @param name The protocol name
+     * @param aliases Aliases for the protocol
+     * @param protocolNumber The protocol number
+     */
+    public Protocol(final String name, final String[] aliases, final int protocolNumber)
     {
         this.name = name;
         this.aliases = Arrays.asList(aliases);
         this.protocolNumber = protocolNumber;
     }
 
+    /**
+     * Get the protocol name.
+     *
+     * @return The protocol name
+     */
     public String getName()
     {
         return this.name;
     }
 
+    /**
+     * Get the protocol aliases.
+     *
+     * @return The protocol aliases
+     */
     public List<String> getAliases()
     {
         return this.aliases;
     }
 
+    /**
+     * Get the protocol number.
+     *
+     * @return The protocol number
+     */
     public int getProtocolNumber()
     {
         return this.protocolNumber;
     }
 
+    /**
+     * Get a strict representation of the protocol.
+     *
+     * @return a string.
+     */
     @Override
+    @SuppressWarnings("StringBufferReplaceableByString")
     public String toString()
     {
-        StringBuilder string = new StringBuilder("{ name: \"");
+        final StringBuilder string = new StringBuilder("{ name: \"");
         string.append(this.name).
-                append( "\", aliases: ").
-                append(this.aliases).
-                append(", protocolNumber: ").
-                append(this.protocolNumber).append(" }");
+            append("\", aliases: ").
+            append(this.aliases).
+            append(", protocolNumber: ").
+            append(this.protocolNumber).append(" }");
 
         return string.toString();
     }
