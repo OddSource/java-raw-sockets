@@ -18,6 +18,7 @@ package io.oddsource.java.net.socket;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Locale;
@@ -81,7 +82,8 @@ class DynamicNativeObject
                 );
             }
 
-            try(final InputStream input = DynamicNativeObject.class.getResourceAsStream(fileName + fileExtension))
+            final URL url = DynamicNativeObject.class.getResource(fileName + fileExtension);
+            try(final InputStream input = url.openStream())
             {
                 Files.copy(input, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
