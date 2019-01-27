@@ -22,6 +22,7 @@
 
 #include <errno.h>
 #include <string>
+#include <cstring>
 #include <vector>
 
 #ifdef _WIN32

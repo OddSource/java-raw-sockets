@@ -5,7 +5,7 @@ target
 dist
 *.a
 *.dll
-*.dynlib
+*.dylib
 *.exe
 *.lib
 *.o

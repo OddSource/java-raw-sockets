@@ -251,19 +251,6 @@
                         <execution>
                             <id>compile-native-code</id>
                             <configuration>
-                                <compilerStartOptions>
-                                    <option>-Wall</option>
-                                    <option>-O2</option>
-                                    <option>-pipe</option>
-                                    <option>-D_REENTRANT</option>
-                                    <option>-D__APPLE_USE_RFC_2292</option>
-                                    <option>-lstdc++</option>
-                                    <option>-I${java.home}/include</option>
-                                    <option>-I${java.home}/../include</option>
-                                    <option>-I${java.home}/include/darwin</option>
-                                    <option>-I${java.home}/../include/darwin</option>
-                                </compilerStartOptions>
-                                <jdkIncludePath>${java.home}/../include</jdkIncludePath>
                                 <sources>
                                     <source>
                                         <directory>source/production/cpp</directory>
@@ -284,21 +271,9 @@
                             <id>link-native-code</id>
                             <configuration>
                                 <attach>false</attach>
-                                <linkerFinalName>lib-oddsource-raw-sockets</linkerFinalName>
-                                <linkerFinalNameExt>so</linkerFinalNameExt>
                                 <linkerOutputDirectory>
                                     source/production/resources/io/oddsource/java/net/socket
                                 </linkerOutputDirectory>
-                                <linkerStartOptions>
-                                    <option>-lstdc++</option>
-                                    <option>-I${java.home}/include</option>
-                                    <option>-I${java.home}/../include</option>
-                                    <option>-I${java.home}/include/darwin</option>
-                                    <option>-I${java.home}/../include/darwin</option>
-                                    <option>-dynamiclib</option>
-                                    <option>-prebind</option>
-                                    <option>-single_module</option>
-                                </linkerStartOptions>
                             </configuration>
                             <goals>
                                 <goal>link</goal>
@@ -484,14 +459,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
@@ -556,4 +523,154 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>oddsource-macos-native-compile</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+                <property>
+                    <name>compile.native</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-native-code</id>
+                                <configuration>
+                                    <compilerStartOptions>
+                                        <option>-Wall</option>
+                                        <option>-O2</option>
+                                        <option>-pipe</option>
+                                        <option>-D_REENTRANT</option>
+                                        <option>-D__APPLE_USE_RFC_2292</option>
+                                        <option>-lstdc++</option>
+                                        <option>-I${java.home}/include</option>
+                                        <option>-I${java.home}/../include</option>
+                                        <option>-I${java.home}/include/darwin</option>
+                                        <option>-I${java.home}/../include/darwin</option>
+                                    </compilerStartOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <phase>compile</phase>
+                            </execution>
+                            <execution>
+                                <id>link-native-code</id>
+                                <configuration>
+                                    <linkerFinalName>liboddsource_raw_sockets</linkerFinalName>
+                                    <linkerFinalNameExt>dylib</linkerFinalNameExt>
+                                    <linkerEndOptions>
+                                        <option>-dynamiclib</option>
+                                        <option>-prebind</option>
+                                        <option>-single_module</option>
+                                    </linkerEndOptions>
+                                    <linkerStartOptions>
+                                        <option>-lstdc++</option>
+                                        <option>-I${java.home}/include</option>
+                                        <option>-I${java.home}/../include</option>
+                                        <option>-I${java.home}/include/darwin</option>
+                                        <option>-I${java.home}/../include/darwin</option>
+                                    </linkerStartOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>oddsource-linux-native-compile</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+                <property>
+                    <name>compile.native</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-native-code</id>
+                                <configuration>
+                                    <compilerStartOptions>
+                                        <option>-Wall</option>
+                                        <option>-O2</option>
+                                        <option>-pipe</option>
+                                        <option>-D_REENTRANT</option>
+                                        <option>-ansi</option>
+                                        <option>-pthread</option>
+                                        <option>-fpic</option>
+                                        <option>-lstdc++</option>
+                                        <option>-I${java.home}/include</option>
+                                        <option>-I${java.home}/../include</option>
+                                        <option>-I${java.home}/include/linux</option>
+                                        <option>-I${java.home}/../include/linux</option>
+                                    </compilerStartOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <phase>compile</phase>
+                            </execution>
+                            <execution>
+                                <id>link-native-code</id>
+                                <configuration>
+                                    <linkerFinalName>liboddsource_raw_sockets</linkerFinalName>
+                                    <linkerFinalNameExt>so</linkerFinalNameExt>
+                                    <linkerStartOptions>
+                                        <option>-lstdc++</option>
+                                        <option>-shared</option>
+                                        <option>-I${java.home}/include</option>
+                                        <option>-I${java.home}/../include</option>
+                                        <option>-I${java.home}/include/linux</option>
+                                        <option>-I${java.home}/../include/linux</option>
+                                    </linkerStartOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>oddsource-no-native-compile</id>
+            <activation>
+                <property>
+                    <name>compile.native</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

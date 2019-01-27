@@ -1,0 +1,23 @@
+FROM openjdk:8-jdk-stretch
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get install -y gcc g++ && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN cd /opt && \
+    wget https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz && \
+    tar -xzvf apache-maven-3.6.0-bin.tar.gz && \
+    rm apache-maven-3.6.0-bin.tar.gz && \
+    ln -s /opt/apache-maven-3.6.0/bin/mvn /usr/local/bin/mvn && \
+    mvn --version
+
+WORKDIR /srv/oddsource/raw-sockets/
+COPY build /srv/oddsource/raw-sockets/build
+COPY source /srv/oddsource/raw-sockets/source
+COPY pom.xml /srv/oddsource/raw-sockets/pom.xml
+RUN rm -fv /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.so \
+    /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.dylib \
+    /srv/oddsource/raw-sockets/source/production/resources/io/oddsource/java/net/socket/*.dll
