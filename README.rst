@@ -8,7 +8,7 @@ OddSource Code Java Raw Sockets
     :target: https://github.com/OddSource/java-raw-sockets/blob/master/LICENSE.txt
 
 .. image:: https://img.shields.io/maven-central/v/io.oddsource.java/raw-sockets.svg
-    :target: https://search.maven.org/artifact/io.oddsource.java/raw-sockets/
+    :target: https://search.maven.org/search?q=g:io.oddsource.java%20AND%20a:raw-sockets&core=gav
 
 .. image:: https://img.shields.io/github/release/OddSource/java-raw-sockets/all.svg
     :target: https://github.com/OddSource/java-raw-sockets/releases

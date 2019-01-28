@@ -1,0 +1,106 @@
+# Copyright © 2010-2019 OddSource Code (license@oddsource.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Here's some documentation about Maven and GitHub publication:
+#
+# $ gpg --full-generate-key
+# $ gpg --list-keys
+# $ gpg --export-secret-keys [key ID] > travis.gpg
+# $ gpg --keyserver pgp.mit.edu --send-key [key ID]
+# $ tar -cvf .travis.secrets.tar settings.xml travis.gpg
+# $ travis login --org
+# $ travis encrypt-file .travis.secrets.tar
+# $ rm .travis.secrets.tar settings.xml travis.gpg
+# $ travis setup releases
+
+language: java
+sudo: false
+cache:
+  directories:
+    - "$HOME/.cache"
+env:
+  global:
+    - secure: "1TjSIbRLVrPED0QR0FUAnN1sSxFjZds1bgnbxLW5KZJRPS8o4r30w7MBX6q56Y0uRQSm8VxkJQXLbrpWAiOcs8SvAOEgNqUEVv2ErMYqEaZa3WunzwNiuKbSam1TnMX192/Wkct+KFDBG7Uwkuk4NQmonky1Bpz4tKmKBtBO1n7MlzU2lEp8DyNzQlnPkSzvHGB258zygCe6Y15cIhgmh/snXCuY0D7+bTsOm0e3rulJGluj5Us77prE4yoOMuO43lD05Lcbk0ZRVjD3ZoNo6SAof6kf+ZnWbo/r0sZxy4JrO+QY1+4sbTzm/j00dCmqedorZsQQp04EjGVbq9tMBqQzbl6O9jejtcg7iPqwJm1vNU9Bz3WJVCdeizrusWrMhAUVWi2vdOvvb1e1rDguZKehVYbjApRg9Afhdh80VbHsowWu0nWoKPiiClGxzeUoIlfSmpNbOZBM0p4c4y+vBaYgD1fwFzCEZNJZu80GXxmIe+qvp3PYUgYO6KxIcss/OozvVCyRqYcYz1Cor99vNoG9+087f/Ma8QNQ8zVYt3nuhJW2V4q15vRkicdZJRzo0kkXtsreqXXcLgrYsvVV9nK8/5yjGrZTDtHSLAxQ9TvMtWjIx7oUZgLAkOkXjfjIUYvzI1A5ddUdVI8AKgicCp8imcOWGjZRFyITezHK5/M="
+    - secure: "Va01SCWGmkyerG/RPHNYF1ZlGfipLs+iIKuG6e2AlN55rKojlJzgKsEi6u0PXbJlxWIB5dmr1u+zhLqHGTymqZuSf89lWLu6AO+DhISuHSF1g3bG57C32fTbHXEfV1RWUDKkIwr9cpSVataxg2ndjKJAmFuzCqlUcd7SU+HyooUAbuACYytvBAHPx7jifJFBGuF7BR6VHM5kucscMjKwUfbncgMRQaJrieXvfCZIvNVG+MGFTywls4hFs85mqiSvV5RIFCWWy0IB+ZDPqdPUqGyzmqm+4YZt/TA70x45gGjS9yi0Q5+w13fqPJJ7kEszjeMyU5hDv1d+VT5+m6oZYFrnxW3txVcXLGV0TnyHeLHhilB8eO/Qnui5aJXQqCEKmbxIqOtpBFQpn0Hbr1DNw4Quw3gbzSeA00MNQ0rZ+4jesAb9/BjzQw8xeYx+yQLOO5aC1KCkW3X/wo68U4SKO368qzKGyhvHZIer7899gqNyUKCLBxVF4JP/1mqnLDB1whVKOnoghmFk/rf/g2pI4r3iRTF79Pk14cfhZSIIG6mVGKlgM8UsXlBaL5nSTf+XRRH6obc5hB0UxZJPn8ffln+RxgMq9zJjpXoXNMnK6dibQOMQ9HYWXs3ZejBvQXYqNlnNUIfzcho/U3DA+XF/l54L2jizi59ctQxw9h8J980="
+    - AWS_REGION="us-east-1"
+    - ODDSOURCE_S3_BUCKET="builds.travis-ci.oddsource.io/java-raw-sockets"
+jobs:
+  include:
+    - stage: build
+      os: linux
+      dist: xenial
+      jdk: openjdk8
+      script:
+        - sudo apt-get update
+        - sudo apt-get install -y gcc g++
+        - mvn test -B -V -e -Dcompile.native=true
+        - cp -v source/production/resources/io/oddsource/java/net/socket/libOddSourceRawSockets.so ~/$TRAVIS_BUILD_NUMBER/
+        - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://$ODDSOURCE_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+    - stage: build
+      os: linux
+      dist: xenial
+      jdk: openjdk11
+      script:
+        - sudo apt-get update
+        - sudo apt-get install -y gcc g++
+        - mvn test -B -V -e -Dcompile.native=true
+    - stage: build
+      os: osx
+      osx_image: xcode9.3
+      #jdk: openjdk8 (Java 8 is the default for xcode9.3, but it uses Oracle JDK, and that cannot be changed)
+      script:
+        - mvn test -B -V -e -Dcompile.native=true
+        - cp -v source/production/resources/io/oddsource/java/net/socket/libOddSourceRawSockets.dylib ~/$TRAVIS_BUILD_NUMBER/
+        - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://$ODDSOURCE_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+    - stage: build
+      os: osx
+      osx_image: xcode10.1
+      #jdk: oraclejdk11 (Java 11 is the default for xcode10.1, but it uses Oracle JDK, and that cannot be changed)
+      script:
+        - mvn test -B -V -e -Dcompile.native=true
+#    - stage: build
+#      os: windows
+#      language: shell
+#      before_install:
+#        - echo $PATH
+#        - choco --help
+#        - choco install jdk8
+#        - choco install maven
+#        - choco install python2
+#      script:
+#        - mvn --version
+    - stage: "Test Reconstitution"
+      os: linux
+      dist: xenial
+      jdk: openjdk8
+      script:
+        - cp -v ~/$TRAVIS_BUILD_NUMBER/libOddSourceRawSockets.dylib source/production/resources/io/oddsource/java/net/socket/
+        - cp -v ~/$TRAVIS_BUILD_NUMBER/libOddSourceRawSockets.so source/production/resources/io/oddsource/java/net/socket/
+        - mvn install -B -V -e -Dcompile.native=false
+        # For troubleshooting, uncomment the following two lines and comment out the after_success step.
+        # - cp -v target/raw-sockets-*.jar ~/$TRAVIS_BUILD_NUMBER/
+        # - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://$ODDSOURCE_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+        # We might need this at some point; don't know: aws s3 rm --recursive s3://$ODDSOURCE_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+stages:
+  - build
+  - "Test Reconstitution"
+#  - name: deploy
+#    if: tag =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$
+install:
+  - pip install --user awscli
+  - export PATH="$PATH:$HOME/Library/Python/2.7/bin"
+  - mkdir -p ~/$TRAVIS_BUILD_NUMBER
+  - aws s3 sync s3://$ODDSOURCE_S3_BUCKET/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
+script:
+  - mvn --version

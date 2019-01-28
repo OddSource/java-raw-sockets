@@ -23,7 +23,7 @@
     <parent>
         <groupId>io.oddsource.java</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>2.2-SNAPSHOT</version>
+        <version>2.2</version>
     </parent>
 
     <groupId>io.oddsource.java.net.socket</groupId>
@@ -60,6 +60,7 @@
         <version.plugin.jar>3.1.1</version.plugin.jar>
         <version.plugin.javadoc>3.1.0-SNAPSHOT</version.plugin.javadoc>
         <version.plugin.native>1.0-alpha-9</version.plugin.native>
+        <version.plugin.resources>3.1.0</version.plugin.resources>
         <version.plugin.source>3.0.1</version.plugin.source>
         <version.plugin.surefire>2.22.1</version.plugin.surefire>
     </properties>
@@ -261,6 +262,30 @@
                                 <goal>link</goal>
                             </goals>
                             <phase>compile</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${version.plugin.resources}</version>
+                    <configuration>
+                        <addDefaultExcludes>**/.gitkeep</addDefaultExcludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default-resources</id>
+                            <goals>
+                                <goal>resources</goal>
+                            </goals>
+                            <phase>process-resources</phase>
+                        </execution>
+                        <execution>
+                            <id>post-compile-resources</id>
+                            <goals>
+                                <goal>resources</goal>
+                            </goals>
+                            <phase>process-classes</phase>
                         </execution>
                     </executions>
                 </plugin>
@@ -536,13 +561,14 @@
                             <execution>
                                 <id>compile-native-code</id>
                                 <configuration>
+                                    <compilerExecutable>g++</compilerExecutable>
+                                    <compilerProvider>generic</compilerProvider>
                                     <compilerStartOptions>
                                         <option>-Wall</option>
                                         <option>-O2</option>
                                         <option>-pipe</option>
                                         <option>-D_REENTRANT</option>
                                         <option>-D__APPLE_USE_RFC_2292</option>
-                                        <option>-lstdc++</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
                                         <option>-I${java.home}/include/darwin</option>
@@ -557,6 +583,8 @@
                             <execution>
                                 <id>link-native-code</id>
                                 <configuration>
+                                    <compilerProvider>generic</compilerProvider>
+                                    <linkerExecutable>g++</linkerExecutable>
                                     <linkerFinalName>libOddSourceRawSockets</linkerFinalName>
                                     <linkerFinalNameExt>dylib</linkerFinalNameExt>
                                     <linkerEndOptions>
@@ -565,7 +593,6 @@
                                         <option>-single_module</option>
                                     </linkerEndOptions>
                                     <linkerStartOptions>
-                                        <option>-lstdc++</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
                                         <option>-I${java.home}/include/darwin</option>
@@ -574,6 +601,10 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -602,6 +633,8 @@
                             <execution>
                                 <id>compile-native-code</id>
                                 <configuration>
+                                    <compilerExecutable>g++</compilerExecutable>
+                                    <compilerProvider>generic</compilerProvider>
                                     <compilerStartOptions>
                                         <option>-Wall</option>
                                         <option>-O2</option>
@@ -610,7 +643,6 @@
                                         <option>-ansi</option>
                                         <option>-pthread</option>
                                         <option>-fpic</option>
-                                        <option>-lstdc++</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
                                         <option>-I${java.home}/include/linux</option>
@@ -625,10 +657,11 @@
                             <execution>
                                 <id>link-native-code</id>
                                 <configuration>
+                                    <compilerProvider>generic</compilerProvider>
+                                    <linkerExecutable>g++</linkerExecutable>
                                     <linkerFinalName>libOddSourceRawSockets</linkerFinalName>
                                     <linkerFinalNameExt>so</linkerFinalNameExt>
                                     <linkerStartOptions>
-                                        <option>-lstdc++</option>
                                         <option>-shared</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
@@ -638,6 +671,10 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -666,6 +703,8 @@
                             <execution>
                                 <id>compile-native-code</id>
                                 <configuration>
+                                    <compilerExecutable>cl</compilerExecutable>
+                                    <compilerProvider>msvc</compilerProvider>
                                     <compilerStartOptions>
                                         <option>-Wall</option>
                                         <option>-O2</option>
@@ -674,7 +713,6 @@
                                         <option>-ansi</option>
                                         <option>-pthread</option>
                                         <option>-fpic</option>
-                                        <option>-lstdc++</option>
                                         <option>-D__int64=long long</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
@@ -690,6 +728,8 @@
                             <execution>
                                 <id>link-native-code</id>
                                 <configuration>
+                                    <compilerProvider>msvc</compilerProvider>
+                                    <linkerExecutable>cl</linkerExecutable>
                                     <linkerFinalName>OddSourceRawSockets</linkerFinalName>
                                     <linkerFinalNameExt>dll</linkerFinalNameExt>
                                     <linkerEndOptions>
@@ -697,7 +737,6 @@
                                         <option>-lws2_32</option>
                                     </linkerEndOptions>
                                     <linkerStartOptions>
-                                        <option>-lstdc++</option>
                                         <option>-shared</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
@@ -707,6 +746,10 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -724,6 +767,10 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
