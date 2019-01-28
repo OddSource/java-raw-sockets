@@ -720,7 +720,7 @@
                                         <option>-ansi</option>
                                         <option>-pthread</option>
                                         <option>-fpic</option>
-                                        <option>-D__int64='long long'</option>
+                                        <option>'-D__int64=long long'</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
                                         <option>-I${java.home}/include/linux</option>
