@@ -723,8 +723,8 @@
                                         <option>-D__int64="long long"</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
-                                        <option>-I${java.home}/include/linux</option>
-                                        <option>-I${java.home}/../include/linux</option>
+                                        <option>-I${java.home}/include/win32</option>
+                                        <option>-I${java.home}/../include/win32</option>
                                     </compilerStartOptions>
                                 </configuration>
                                 <goals>
@@ -747,8 +747,8 @@
                                         <option>-shared</option>
                                         <option>-I${java.home}/include</option>
                                         <option>-I${java.home}/../include</option>
-                                        <option>-I${java.home}/include/linux</option>
-                                        <option>-I${java.home}/../include/linux</option>
+                                        <option>-I${java.home}/include/win32</option>
+                                        <option>-I${java.home}/../include/win32</option>
                                     </linkerStartOptions>
                                 </configuration>
                             </execution>
