@@ -703,8 +703,8 @@
                             <execution>
                                 <id>compile-native-code</id>
                                 <configuration>
-                                    <compilerExecutable>cl</compilerExecutable>
-                                    <compilerProvider>msvc</compilerProvider>
+                                    <compilerExecutable>g++</compilerExecutable>
+                                    <compilerProvider>generic</compilerProvider>
                                     <compilerStartOptions>
                                         <option>-Wall</option>
                                         <option>-O2</option>
@@ -728,8 +728,8 @@
                             <execution>
                                 <id>link-native-code</id>
                                 <configuration>
-                                    <compilerProvider>msvc</compilerProvider>
-                                    <linkerExecutable>cl</linkerExecutable>
+                                    <compilerProvider>generic</compilerProvider>
+                                    <linkerExecutable>g++</linkerExecutable>
                                     <linkerFinalName>OddSourceRawSockets</linkerFinalName>
                                     <linkerFinalNameExt>dll</linkerFinalNameExt>
                                     <linkerEndOptions>
