@@ -48,32 +48,21 @@ class DynamicNativeObject
 
     private static final String LIBRARY_EXTENSION_WINDOWS = ".dll";
 
+    private static final String LIBRARY_ACTUAL_NAME =
+        OS_IS_WINDOWS ? LIBRARY_NAME : LIBRARY_PREFIX_UNIX + LIBRARY_NAME;
+
+    private static final String LIBRARY_ACTUAL_EXTENSION =
+        OS_IS_WINDOWS ?
+        LIBRARY_EXTENSION_WINDOWS :
+        (OS_IS_MAC ? LIBRARY_EXTENSION_MAC : LIBRARY_EXTENSION_NON_MAC_UNIX);
+
     static
     {
-        final String fileName;
-        final String fileExtension;
-        if(OS_IS_WINDOWS)
-        {
-            fileName = LIBRARY_NAME;
-            fileExtension = LIBRARY_EXTENSION_WINDOWS;
-        }
-        else
-        {
-            if(OS_IS_MAC)
-            {
-                fileName = LIBRARY_PREFIX_UNIX + LIBRARY_NAME;
-                fileExtension = LIBRARY_EXTENSION_MAC;
-            }
-            else
-            {
-                fileName = LIBRARY_PREFIX_UNIX + LIBRARY_NAME;
-                fileExtension = LIBRARY_EXTENSION_NON_MAC_UNIX;
-            }
-        }
+        final String resource = LIBRARY_ACTUAL_NAME + LIBRARY_ACTUAL_EXTENSION;
 
         try
         {
-            final File tempFile = File.createTempFile(fileName, fileExtension);
+            final File tempFile = File.createTempFile(LIBRARY_ACTUAL_NAME, LIBRARY_ACTUAL_EXTENSION);
             tempFile.deleteOnExit();
             if(!tempFile.exists())
             {
@@ -82,7 +71,14 @@ class DynamicNativeObject
                 );
             }
 
-            final URL url = DynamicNativeObject.class.getResource(fileName + fileExtension);
+            final URL url = DynamicNativeObject.class.getResource(resource);
+            if(url == null)
+            {
+                throw new RawSocketRuntimeException(
+                    "Failed to get classpath resource " + resource + " for native library."
+                );
+            }
+
             try(final InputStream input = url.openStream())
             {
                 Files.copy(input, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -92,10 +88,7 @@ class DynamicNativeObject
         }
         catch(final IOException e)
         {
-            throw new RawSocketRuntimeException(
-                "Failed to load dynamic library " + fileName + fileExtension + " due to error.",
-                e
-            );
+            throw new RawSocketRuntimeException("Failed to load dynamic library " + resource + " due to error.", e);
         }
     }
 

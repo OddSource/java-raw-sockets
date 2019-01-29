@@ -26,8 +26,8 @@
 
 #ifdef _WIN32
 
-#   include <winsock2.h>
-#   include <ws2tcpip.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
 #else /* if defined(_WIN32) */
 
@@ -103,11 +103,10 @@ JNIEXPORT jint JNICALL Java_io_oddsource_java_net_socket_Constants_registerNumer
 static void populateConstantMap()
 {
     constantMap["IPPROTO_IP"]      = IPPROTO_IP;
-    constantMap["IPPROTO_IPIP"]    = IPPROTO_IPIP;
 #ifdef IPPROTO_IPV4
     constantMap["IPPROTO_IPV4"]    = IPPROTO_IPV4;
 #else
-    constantMap["IPPROTO_IPV4"]    = IPPROTO_IPIP;
+    constantMap["IPPROTO_IPV4"]    = 4;
 #endif
     constantMap["IPPROTO_IPV6"]    = IPPROTO_IPV6;
     constantMap["IPPROTO_TCP"]     = IPPROTO_TCP;
@@ -120,6 +119,7 @@ static void populateConstantMap()
     constantMap["IP_RECVRETOPTS"]  = IP_RECVRETOPTS;
     constantMap["IP_TOS"]          = IP_TOS;
     constantMap["IP_TTL"]          = IP_TTL;
+    constantMap["IP_RECVTTL"]      = IP_RECVTTL;
 
     /*
      * In Unix systems, IP_HDRINCL can be passed to setsockopt for IPv6 sockets, so IPV6_HDRINCL isn't defined. Windows

@@ -32,10 +32,10 @@ public final class Constants extends DynamicNativeObject
      */
     public static final int IPPROTO_IP;
 
-    /**
-     * The IP tunnel protocol.
+    /*
+     * The IP tunnel protocol. (Considering deletion.)
      */
-    public static final int IPPROTO_IPIP;
+    // public static final int IPPROTO_IPIP;
 
     /**
      * IPv4 identifier.
@@ -201,7 +201,7 @@ public final class Constants extends DynamicNativeObject
     static
     {
         IPPROTO_IP = Constants.registerNumericConstant("IPPROTO_IP");
-        IPPROTO_IPIP = Constants.registerNumericConstant("IPPROTO_IPIP");
+        //IPPROTO_IPIP = Constants.registerNumericConstant("IPPROTO_IPIP");
         IPPROTO_IPV4 = Constants.registerNumericConstant("IPPROTO_IPV4");
         IPPROTO_IPV6 = Constants.registerNumericConstant("IPPROTO_IPV6");
         IPPROTO_TCP = Constants.registerNumericConstant("IPPROTO_TCP");
